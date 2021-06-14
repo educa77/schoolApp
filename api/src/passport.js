@@ -43,7 +43,7 @@ passport.use(
   )
 );
 
-/* passport.use(
+passport.use(
   new GoogleStrategy(
     {
       clientID: GOOGLE_CLIENT_ID,
@@ -74,9 +74,9 @@ passport.use(
       return done(null, user);
     }
   )
-); */
+);
 
-/* passport.use(
+passport.use(
   new GitHubStrategy(
     {
       clientID: GITHUB_APP_ID,
@@ -107,7 +107,7 @@ passport.use(
       return done(null, user);
     }
   )
-); */
+);
 
 passport.use(
   new BearerStrategy((token, done) => {
