@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"cd api && yarn dev\" \"cd client && yarn dev\""
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/educa77/schoolApp/issues"
   },
-  "homepage": "https://github.com/educa77/schoolApp#readme"
+  "homepage": "https://github.com/educa77/schoolApp#readme",
+  "dependencies": {
+    "concurrently": "^6.2.0"
+  }
 }

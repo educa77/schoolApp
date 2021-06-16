@@ -1,0 +1,32 @@
+export const colors = {
+  green: "#008657",
+  darkGreen: "#223d33",
+  greenRgbValuesOnly: "0,134,87",
+  hoverGreen: "#006340",
+  black: "#2d2d2d",
+  modalBlack: "#000000",
+  white: "#ffffff",
+  darkGray: "#cccccc",
+  gray: "#979797",
+  midGray: "#e8e8e8",
+  lightGray: "#f1f1f1",
+  paleGray: "#f7f7f7",
+  orange: "#f7931d",
+  red: "#de3636",
+  pink: "#fbeaea",
+  fucsia: "#d5354e",
+  darkPink: "#da6275",
+  inputPlaceholder: "#2d2d2d",
+  calendar: {
+    disable: "#c7c7c7",
+    border: "#ededed",
+  },
+};
+export const device = {
+  xsm: "450px",
+  sm: "576px",
+  md: "768px",
+  lg: "992px",
+  xl: "1200px",
+  xxl: "1440px",
+};

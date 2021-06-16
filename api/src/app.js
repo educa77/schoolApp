@@ -31,11 +31,16 @@ app.use((req, res, next) => {
   next();
 });
 
+const playgroundSettings = {
+  "schema.polling.enable": false,
+};
+
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
   introspection: true,
-  playground: true,
+  playground: playgroundSettings,
+  debug: false,
 });
 
 apolloServer.applyMiddleware({ app });
