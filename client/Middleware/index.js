@@ -6,7 +6,7 @@ export default function Middleware({ authRequired }) {
   const user = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (authRequired && (!user || !user?.token)) Router.push("/ingresar");
+    if (authRequired && (!user || !user?.token)) Router.push("/login");
   }, [user, authRequired]);
 
   return null;

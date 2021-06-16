@@ -1,11 +1,16 @@
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import Dashboard from "../pages/dashboard";
+import styled from "styled-components";
 
 export default function Home() {
-  const user = useSelector((state) => state.auth);
-  return <></>;
+  return (
+    <>
+      <Dashboard />
+    </>
+  );
 }
 
 Home.renderData = {
   authRequired: true,
-  currentView: "Home",
+  currentView: "Dashboard",
 };

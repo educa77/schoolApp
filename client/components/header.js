@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -11,6 +10,7 @@ import Link from "next/link";
 import useStyles from "./useStyles";
 import { Avatar } from "@material-ui/core";
 import styled from "styled-components";
+import Router from "next/router";
 
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "../dispatchers/auth";
@@ -18,7 +18,6 @@ import { signOut } from "../dispatchers/auth";
 export default function Header({ handleShowMenu }) {
   const dispatch = useDispatch();
 
-  const history = useHistory();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -66,7 +65,7 @@ export default function Header({ handleShowMenu }) {
           {user?.givenName && capitalizeFirstLetter(user?.givenName)}{" "}
           {user?.familyName && capitalizeFirstLetter(user?.familyName)}
         </UserName>
-        <PerfilButton onClick={() => history.push("/profile")}>
+        <PerfilButton onClick={() => Router.push("/profile")}>
           Perfil
         </PerfilButton>
         <LogoutBtn onClick={() => dispatch(signOut())}>Cerrar sesión</LogoutBtn>

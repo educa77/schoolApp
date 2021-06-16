@@ -11,7 +11,7 @@ export const signOut = () => {
 };
 
 export const initialize = (localUser) => {
-  Axios.defaults.baseURL = "http://localhost:3001";
+  Axios.defaults.baseURL = process.env.urlApi;
 
   if (localUser && localUser.token) {
     Axios.defaults.headers.common[
@@ -27,7 +27,7 @@ export const signInWithEmail = (username, password) => {
   return async (dispatch) => {
     dispatch(startLoading());
     try {
-      const { data } = await Axios.post(`http://localhost:3001/auth/email`, {
+      const { data } = await Axios.post(`${process.env.urlApi}/auth/email`, {
         username,
         password,
       });
@@ -55,7 +55,7 @@ export const signInWithToken = (token) => {
   return async (dispatch) => {
     dispatch(startLoading());
     try {
-      const { data } = await Axios.get(`${process.env.REACT_APP_API}/auth/me`, {
+      const { data } = await Axios.get(`${process.env.urlApi}/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (data) {
@@ -75,12 +75,12 @@ export const signInWithToken = (token) => {
 
 export const signInWithGoogle = () => {
   if (window) {
-    window.location = `${process.env.REACT_APP_API}/auth/google`;
+    window.location = `${process.env.urlApi}/auth/google`;
   }
 };
 
 export const signInWithGithub = () => {
   if (window) {
-    window.location = `${process.env.REACT_APP_API}/auth/github`;
+    window.location = `${process.env.urlApi}/auth/github`;
   }
 };

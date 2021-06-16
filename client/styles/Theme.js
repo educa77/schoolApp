@@ -12,7 +12,7 @@ export const colors = {
   lightGray: "#f1f1f1",
   paleGray: "#f7f7f7",
   orange: "#f7931d",
-  red: "#de3636",
+  red: "#d0021b",
   pink: "#fbeaea",
   fucsia: "#d5354e",
   darkPink: "#da6275",

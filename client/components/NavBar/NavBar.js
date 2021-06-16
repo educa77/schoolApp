@@ -16,7 +16,9 @@ import useStyles from "./NavBar.styles";
 import NavBarItem from "./NavBar.Item";
 import { useSelector } from "react-redux";
 
-function NavBar({ show, children }) {
+function NavBar({ show, children, view }) {
+  console.log(view, "view");
+
   const classes = useStyles(show);
   const { user } = useSelector((state) => state.auth);
 
@@ -60,11 +62,18 @@ function NavBar({ show, children }) {
         <Divider />
         {/* {user && user.roles.find((role) => role.name !== "staff") && ( */}
         <>
-          <NavBarItem title="Dashboard" icon={DashboardRounded} to="/" exact />
+          <NavBarItem
+            title="Dashboard"
+            icon={DashboardRounded}
+            to="/"
+            exact
+            active={view === "Dashboard"}
+          />
           <NavBarItem
             title="Cohortes"
             icon={ClassRounded}
             to="/admin/cohortes"
+            active={view === "Cohortes"}
           />
           <NavBarItem
             title="Instructores"

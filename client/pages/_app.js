@@ -1,21 +1,45 @@
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import { ResetStyle } from "../styles/Reset";
 import { GlobalStyle } from "../styles/Global";
 import Layout from "../layout";
 import { Provider } from "react-redux";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import LuxonUtils from "@date-io/luxon";
 import Middleware from "../Middleware";
+import { PagePreloader } from "../components/PagePreloader";
+import Router from "next/router";
+import { ApolloProvider } from "@apollo/client";
+import { client } from "../apollo";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 
 import store from "../redux/store";
 
 function MyApp({ Component, pageProps }) {
-  console.log(Component.renderData, "component");
+  const [preload, setPreload] = useState(true);
 
   const currentView = Component?.renderData?.currentView
     ? Component.renderData.currentView
-    : "";
+    : "Dashboard";
+  const headerVisibility = Component?.renderData?.header
+    ? Component.renderData.header
+    : "true";
+
+  // Listen page change
+  Router.events.on("routeChangeStart", () => {
+    setPreload(true);
+  });
+  Router.events.on("routeChangeComplete", () => {
+    setPreload(false);
+    window.scrollTo(0, 0);
+  });
+  Router.events.on("routeChangeError", () => {
+    setPreload(false);
+  });
+
+  useEffect(() => {
+    setPreload(false);
+  }, []);
 
   const theme = createMuiTheme({
     palette: {
@@ -35,17 +59,23 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <GlobalStyle />
       <ResetStyle />
+      <PagePreloader visible={preload} />
 
-      <Provider store={store}>
-        <Middleware authRequired={Component?.renderData?.authRequired} />
-        <ThemeProvider theme={theme}>
-          <MuiPickersUtilsProvider utils={LuxonUtils} locale="es">
-            <Layout currentView={currentView}>
-              <Component {...pageProps} />
-            </Layout>
-          </MuiPickersUtilsProvider>
-        </ThemeProvider>
-      </Provider>
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <Middleware authRequired={Component?.renderData?.authRequired} />
+          <ThemeProvider theme={theme}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <Layout
+                currentView={currentView}
+                headerVisibility={headerVisibility}
+              >
+                <Component {...pageProps} />
+              </Layout>
+            </MuiPickersUtilsProvider>
+          </ThemeProvider>
+        </Provider>
+      </ApolloProvider>
     </>
   );
 }

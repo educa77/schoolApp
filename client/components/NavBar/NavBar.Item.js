@@ -5,23 +5,17 @@ import {
   ListItemText,
   Tooltip,
 } from "@material-ui/core";
-import { useHistory, useRouteMatch } from "react-router-dom";
 import useStyles from "./NavBar.Item.styles";
+import Router from "next/router";
 
-function NavBarItem({ title, icon: Icon, to, exact }) {
-  //console.log(title, Icon, to, exact, "navbar item");
+function NavBarItem({ title, icon: Icon, to, exact, active }) {
   const classes = useStyles();
-  /*  const match = useRouteMatch(to); */
-  //const match = false
-  const history = useHistory();
+
   const selected = useMemo(() => {
     if (!to) return false;
-    /*     else if (match && exact) return match.isExact;
-    else if (match) return true; */
-    return false;
   }, [to, exact /* match */]);
   const handleClick = useCallback(() => {
-    if (to) history.push(to);
+    if (to) Router.push(to);
   }, [to]);
   return (
     <ListItem
@@ -29,6 +23,7 @@ function NavBarItem({ title, icon: Icon, to, exact }) {
       button
       selected={selected}
       onClick={handleClick}
+      selected={active ? active : false}
     >
       <ListItemIcon>
         <Tooltip title={title} placement="right">
