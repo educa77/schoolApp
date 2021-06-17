@@ -23,7 +23,6 @@ export const initialize = (localUser) => {
 };
 
 export const signInWithEmail = (username, password) => {
-  console.log("vine aca?");
   return async (dispatch) => {
     dispatch(startLoading());
     try {

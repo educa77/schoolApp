@@ -11,9 +11,11 @@ import { Button, ButtonGroup, Snackbar } from "@material-ui/core";
 import { MailOutlineRounded, FileCopyRounded } from "@material-ui/icons";
 import { useCopyToClipboard } from "react-use";
 import { Alert } from "@material-ui/lab";
-import Router from "next/router";
+import { useRouter } from "next/router";
 
 function Alumns({ className, data: componentData, ide }) {
+  const router = useRouter();
+
   const [inviteMutation, { loading: addLoading }] =
     useMutation(ADD_USER_TO_COHORTE);
 
@@ -158,7 +160,7 @@ function Alumns({ className, data: componentData, ide }) {
       addButtonLabel: "Agregar estudiante",
       actions: {
         view: {
-          onSubmit: (id) => Router.push(`/profile/${id}`),
+          onSubmit: (id) => router.push(`/profile/${id}`),
         },
         delete: {
           initialValues: {

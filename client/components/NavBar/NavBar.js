@@ -35,63 +35,67 @@ function NavBar({ show, children, view }) {
       }}
     >
       <List>
-        {/*        {user && user.roles.find((role) => role.name === "staff") && ( */}
-        <>
-          <NavBarItem
-            title="Cohortes"
-            icon={ClassRounded}
-            /*             to={
-              user.cohortes.length > 0 &&
-              `/student/cohorte/${user.cohortes[0].id}`
-            } */
-          />
-          <NavBarItem
-            title="Modulos"
-            icon={AssignmentIndRounded}
-            to="/student/modules"
-          />
-          <NavBarItem
-            title="Grupos"
-            icon={GroupWorkIcon}
-            to="/student/groups"
-          />
-        </>
-        {/*  )} */}
+        {user && user.roles.find((role) => role.name === "student") && (
+          <>
+            <NavBarItem
+              title="Cohortes"
+              icon={ClassRounded}
+              to={
+                user.cohortes.length > 0 &&
+                `/student/cohorte/${user.cohortes[0].id}`
+              }
+            />
+            <NavBarItem
+              title="Modulos"
+              icon={AssignmentIndRounded}
+              to="/student/modules"
+            />
+            <NavBarItem
+              title="Grupos"
+              icon={GroupWorkIcon}
+              to="/student/groups"
+            />
+          </>
+        )}
         <Divider />
-        {/* {user && user.roles.find((role) => role.name !== "staff") && ( */}
-        <>
-          <NavBarItem
-            title="Dashboard"
-            icon={DashboardRounded}
-            to="/"
-            exact
-            active={view === "Dashboard"}
-          />
-          <NavBarItem
-            title="Cohortes"
-            icon={ClassRounded}
-            to="/admin/cohortes"
-            active={view === "Cohortes"}
-          />
-          <NavBarItem
-            title="Instructores"
-            icon={AssignmentIndRounded}
-            to="/admin/instructors"
-          />
-          <NavBarItem title="PM" icon={RecordVoiceOverRounded} to="/admin/pm" />
-          <NavBarItem
-            title="Alumnos"
-            icon={EmojiPeopleRounded}
-            to="/admin/alumns"
-          />
-          <NavBarItem
-            title="Modulos"
-            icon={ViewComfyRoundedIcon}
-            to="/admin/modules"
-          />
-          <Divider />
-        </>
-        {/* )} */}
+        {user && user.roles.find((role) => role.name !== "staff") && (
+          <>
+            <NavBarItem
+              title="Dashboard"
+              icon={DashboardRounded}
+              to="/"
+              exact
+              active={view === "Dashboard"}
+            />
+            <NavBarItem
+              title="Cohortes"
+              icon={ClassRounded}
+              to="/admin/cohortes"
+              active={view === "Cohortes"}
+            />
+            <NavBarItem
+              title="Instructores"
+              icon={AssignmentIndRounded}
+              to="/admin/instructors"
+            />
+            <NavBarItem
+              title="PM"
+              icon={RecordVoiceOverRounded}
+              to="/admin/pm"
+            />
+            <NavBarItem
+              title="Alumnos"
+              icon={EmojiPeopleRounded}
+              to="/admin/alumns"
+            />
+            <NavBarItem
+              title="Modulos"
+              icon={ViewComfyRoundedIcon}
+              to="/admin/modules"
+            />
+            <Divider />
+          </>
+        )}
       </List>
     </Drawer>
   );

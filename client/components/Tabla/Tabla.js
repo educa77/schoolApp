@@ -24,7 +24,6 @@ import { Add, Delete, Edit, Visibility } from "@material-ui/icons";
 import styled from "styled-components";
 
 export default function Tabla({
-  loading,
   data,
   count,
   page,
@@ -69,7 +68,7 @@ export default function Tabla({
   return (
     <>
       <TableContainer className={classes.container}>
-        {!loading && data.data && data.data.length > 0 ? (
+        {data.data && data.data.length > 0 ? (
           <Table
             stickyHeader
             className={classes.table}
@@ -154,22 +153,20 @@ export default function Tabla({
             </TableBody>
           </Table>
         ) : (
-          !loading && (
-            <Empty>
-              <img src="admin/assets/empty.svg" alt="sin datos" />
-              <div className="info">
-                {data.actions?.create && (
-                  <StyledAddButton
-                    size="large"
-                    startIcon={<Add />}
-                    onClick={data.actions.create.onClick || handleAddClickOpen}
-                  >
-                    {data.addButtonLabel}
-                  </StyledAddButton>
-                )}
-              </div>
-            </Empty>
-          )
+          <Empty>
+            <img src="admin/assets/empty.svg" alt="sin datos" />
+            <div className="info">
+              {data.actions?.create && (
+                <StyledAddButton
+                  size="large"
+                  startIcon={<Add />}
+                  onClick={data.actions.create.onClick || handleAddClickOpen}
+                >
+                  {data.addButtonLabel}
+                </StyledAddButton>
+              )}
+            </div>
+          </Empty>
         )}
         {data.actions && data.actions.create && (
           <TableDialog
@@ -183,7 +180,7 @@ export default function Tabla({
         <TablePagination
           rowsPerPageOptions={rowsPerPageOptions}
           component="div"
-          count={count}
+          count={Math.ceil(count / 5) || undefined}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={onChangePage}

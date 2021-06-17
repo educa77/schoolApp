@@ -6,17 +6,20 @@ import {
   Tooltip,
 } from "@material-ui/core";
 import useStyles from "./NavBar.Item.styles";
-import Router from "next/router";
+import { useRouter } from "next/router";
 
 function NavBarItem({ title, icon: Icon, to, exact, active }) {
   const classes = useStyles();
+  const router = useRouter();
 
   const selected = useMemo(() => {
     if (!to) return false;
-  }, [to, exact /* match */]);
+  }, [to, exact]);
+
   const handleClick = useCallback(() => {
-    if (to) Router.push(to);
+    if (to) router.push(to);
   }, [to]);
+
   return (
     <ListItem
       className={classes.listItem}

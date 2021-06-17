@@ -218,7 +218,7 @@ function Cohortes() {
   return (
     <div style={{ height: "calc(100vh - 65px)" }}>
       <Tabla
-        loading={loading}
+        /* loading={loading} */
         data={tableData}
         count={count?.countCohortes || undefined}
         page={page}

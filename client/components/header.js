@@ -10,13 +10,14 @@ import Link from "next/link";
 import useStyles from "./useStyles";
 import { Avatar } from "@material-ui/core";
 import styled from "styled-components";
-import Router from "next/router";
+import { useRouter } from "next/router";
 
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "../dispatchers/auth";
 
 export default function Header({ handleShowMenu }) {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -64,7 +65,7 @@ export default function Header({ handleShowMenu }) {
           {user?.givenName && capitalizeFirstLetter(user?.givenName)}{" "}
           {user?.familyName && capitalizeFirstLetter(user?.familyName)}
         </UserName>
-        <PerfilButton onClick={() => Router.push("/profile")}>
+        <PerfilButton onClick={() => router.push("/profile/user")}>
           Perfil
         </PerfilButton>
         <LogoutBtn onClick={() => dispatch(signOut())}>Cerrar sesión</LogoutBtn>

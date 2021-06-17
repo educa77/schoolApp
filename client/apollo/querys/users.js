@@ -24,6 +24,18 @@ export const COUNT_USERS = gql`
     countUsers(where: $where)
   }
 `;
+export const USER_BY_ID = gql`
+  query users($id: Int) {
+    users(id: $id) {
+      id
+      givenName
+      familyName
+      nickName
+      email
+      photoUrl
+    }
+  }
+`;
 export const USER_FULL = gql`
   query userFull(
     $id: Int
@@ -63,7 +75,6 @@ export const USER_FULL = gql`
           familyName
           nickName
           email
-
         }
       }
     }
