@@ -13,8 +13,6 @@ function Groups({
   loading: componentLoading,
   onRefetch,
 }) {
-  console.log("estoy en groups");
-
   const [
     execute,
     { loading: queryLoading, error, data: preData, refetch: preRefetch },
@@ -61,7 +59,7 @@ function Groups({
   const data = useMemo(
     () =>
       preData?.groups.map((grupo) => {
-        const grupototal = { ...grupo, qty: grupo.students.length };
+        const grupototal = { ...grupo, qty: grupo?.students?.length };
         return grupototal;
       }) || componentData?.cohortes[0].groups,
     [preData, componentData]

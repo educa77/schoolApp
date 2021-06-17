@@ -67,7 +67,6 @@ export default function Ingresar() {
       dispatch(signInWithToken(token));
     }
   }, [dispatch, Router]);
-  console.log(token, "token");
 
   const formik = useFormik({
     initialValues: {

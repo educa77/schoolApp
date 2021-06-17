@@ -33,8 +33,6 @@ export default function Tabla({
   onChangePage,
   onChangeRowsPerPage,
 }) {
-  console.log("estoy aca tabla??");
-
   const classes = useStyles();
   const [openDel, setOpenDel] = useState(false);
   const theme = useTheme();

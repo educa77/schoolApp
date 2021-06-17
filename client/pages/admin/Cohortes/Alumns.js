@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useMutation, useLazyQuery } from "@apollo/client";
+import { useMutation, useLazyQuery, useQuery } from "@apollo/client";
 import { Tabla } from "../../../components/Tabla";
 import { COUNT_USERS } from "../../../apollo/querys/users";
+import { COHORTE_BY_ID } from "../../../apollo/querys/cohortes";
 import {
   ADD_USER_TO_COHORTE,
   DELETE_USER_TO_COHORTE,
@@ -12,15 +13,7 @@ import { useCopyToClipboard } from "react-use";
 import { Alert } from "@material-ui/lab";
 import Router from "next/router";
 
-function Alumns({
-  className,
-  cohorte,
-  data: componentData,
-  loading: componentLoading,
-  onRefetch,
-}) {
-  console.log("estoy en Alumns");
-  console.log(onRefetch, "onRefetch");
+function Alumns({ className, data: componentData, ide }) {
   const [inviteMutation, { loading: addLoading }] =
     useMutation(ADD_USER_TO_COHORTE);
   const [deleteMutation, { loading: deleteLoading }] = useMutation(
@@ -52,10 +45,48 @@ function Alumns({
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
+  if (componentData) {
+    const variablesId = {
+      id: componentData[0]?.id,
+    };
+    var { data: preData, refetch } = useQuery(COHORTE_BY_ID, {
+      variablesId,
+    });
+  }
+  if (ide) {
+    const variablesId = {
+      id: ide,
+    };
+    var { data: preData, refetch } = useQuery(COHORTE_BY_ID, {
+      variablesId,
+    });
+  }
+
+  var cohorteMemo = useMemo(() => {
+    if (Array.isArray(preData?.cohortes)) {
+      return preData.cohortes.map((item) => {
+        return {
+          ...item,
+          name: item.name.toUpperCase(),
+          instructorDisplay: `${
+            capitalizeFirstLetter(item.instructor.givenName) || ""
+          } ${capitalizeFirstLetter(item.instructor.familyName) || ""}`,
+          instructor: item.instructor.id,
+          groups: Array.isArray(item.groups) ? item.groups.length : 0,
+          alumns: Array.isArray(item.users) ? item.users.length : 0,
+          users: item.users,
+        };
+      });
+    } else return preData;
+  }, [preData]);
+
+  var cohorte = useMemo(() => {
+    if (cohorteMemo) return cohorteMemo.pop();
+  }, [cohorteMemo]);
 
   const variables = useMemo(
     () => ({
-      where: cohorte ? { Cohorte: { id: cohorte.id } } : undefined,
+      where: cohorte ? { Cohorte: { id: cohorte?.id } } : undefined,
       limit: rowsPerPage,
       offset: rowsPerPage * page,
     }),
@@ -69,9 +100,6 @@ function Alumns({
 
   useEffect(() => {
     if (cohorte) {
-      //   execute({
-      //     variables,
-      //   });
       executeCount({ variables });
     }
   }, [cohorte, executeCount, variables]);
@@ -79,7 +107,7 @@ function Alumns({
   const data = useMemo(
     () =>
       (cohorte &&
-        cohorte.users.map((user) => {
+        cohorte?.users?.map((user) => {
           var usuario = {
             __typename: user.__typename,
             givenName: user.givenName && capitalizeFirstLetter(user.givenName),
@@ -94,9 +122,8 @@ function Alumns({
           };
           return usuario;
         })) ||
-      componentData?.cohortes[0].users ||
       "",
-    [cohorte, componentData]
+    [cohorte]
   );
 
   const tableData = useMemo(
@@ -148,7 +175,7 @@ function Alumns({
                 userId: datos.variables.userId,
               },
             });
-            onRefetch();
+            refetch();
           },
         },
         create: {
@@ -165,7 +192,7 @@ function Alumns({
               },
             };
             await inviteMutation(data);
-            onRefetch();
+            refetch();
           },
           submitButtonLabel: "Agregar",
           title: "Agregar estudiante",
@@ -179,7 +206,7 @@ function Alumns({
       copyToClipboard,
       cohorte?.id,
       deleteMutation,
-      onRefetch,
+      refetch,
       inviteMutation,
     ]
   );
@@ -189,11 +216,11 @@ function Alumns({
       <Tabla
         loading={loading}
         data={tableData}
-        count={count}
+        count={Math.ceil(count?.countUsers / 5) || undefined}
         page={page}
         rowsPerPage={rowsPerPage}
-        onChangePage={(_, page) => onChangePage(page)}
-        onChangeRowsPerPage={(e) => onChangeRowsPerPage(e.target.value)}
+        onChangePage={onChangePage}
+        onChangeRowsPerPage={onChangeRowsPerPage}
       />{" "}
       <Snackbar
         open={showSnackbar}

@@ -23,7 +23,6 @@ export default function Header({ handleShowMenu }) {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const user = useSelector((state) => state.auth);
-  console.log(user, "user");
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 

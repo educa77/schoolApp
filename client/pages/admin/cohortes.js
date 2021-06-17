@@ -8,7 +8,6 @@ import {
   EDIT_COHORTE,
 } from "../../apollo/Mutations/cohortes";
 import { getUserRol } from "../../apollo/querys/users";
-import { useHistory } from "react-router-dom";
 import Alumns from "./Cohortes/Alumns";
 import Groups from "./Cohortes/groups";
 import {
@@ -55,7 +54,6 @@ function Cohortes() {
   const [createMutation, resultCreate] = useMutation(CREATE_COHORTE);
   const [deleteMutation, resultDelete] = useMutation(DELETE_COHORTE);
   const [updateMutation, resultUpdate] = useMutation(EDIT_COHORTE);
-  const history = useHistory();
 
   const data = useMemo(() => {
     if (Array.isArray(preData?.cohortes)) {
@@ -67,8 +65,8 @@ function Cohortes() {
             capitalizeFirstLetter(item.instructor.givenName) || ""
           } ${capitalizeFirstLetter(item.instructor.familyName) || ""}`,
           instructor: item.instructor.id,
-          groups: item.groups.length,
-          alumns: item.users.length,
+          groups: Array.isArray(item.groups) ? item.groups.length : 0,
+          alumns: Array.isArray(item.users) ? item.users.length : 0,
           users: item.users,
         };
       });
@@ -96,7 +94,14 @@ function Cohortes() {
           key: "alumns",
           label: "Alumnos",
           align: "left",
-          component: (cohorte) => <AlumnsComponent cohorte={cohorte} />,
+          component: (cohorte) => (
+            <AlumnsComponent
+              cohorte={cohorte}
+              onRefetch={fetch}
+              loading={loading}
+              data={data}
+            />
+          ),
         },
       ],
       addButtonLabel: "Agregar cohorte",
@@ -186,7 +191,7 @@ function Cohortes() {
     }),
     [
       data,
-      history,
+      Router.push,
       error,
       loading,
       createMutation,
@@ -228,12 +233,11 @@ function Cohortes() {
   );
 }
 
-function AlumnsComponent(cohorte) {
-  console.log("estoy aca en alumnscomponent");
+function AlumnsComponent({ data, cohorte }) {
   const [show, setShow] = useState(false);
   return (
     <>
-      <Button onClick={() => setShow(true)}>{cohorte.cohorte.alumns}</Button>
+      <Button onClick={() => setShow(true)}>{cohorte.alumns}</Button>
       <Dialog
         open={show}
         onClose={() => setShow(false)}
@@ -242,7 +246,7 @@ function AlumnsComponent(cohorte) {
       >
         <DialogTitle>Alumnos</DialogTitle>
         <DialogContent>
-          <Alumns cohorte={cohorte.cohorte} />
+          <Alumns data={data} cohorte={cohorte} />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShow(false)} color="primary">

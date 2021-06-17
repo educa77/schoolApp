@@ -29,8 +29,6 @@ function CohortesDetail({ className }) {
     variables,
   });
 
-  console.log(data, "data");
-
   useEffect(() => {
     if (!resultCreate.loading && resultCreate.called) {
       refetch();
@@ -46,6 +44,8 @@ function CohortesDetail({ className }) {
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
+
+  console.log(data, "data de id");
   return (
     <Container style={{ paddingTop: "1rem" }}>
       {
@@ -93,7 +93,7 @@ function CohortesDetail({ className }) {
                   </CohorteDetailItem>
                   <CohorteDetailItem>
                     <p>Cantidad de alumnos: </p>
-                    <span>{data && data.cohortes[0].users.length}</span>
+                    <span>{data && data.cohortes[0].users?.length}</span>
                   </CohorteDetailItem>
                 </div>
               </CardContent>
@@ -115,11 +115,7 @@ function CohortesDetail({ className }) {
             <Card variant="outlined" style={{ position: "relative" }}>
               <CardHeader title="Alumnos" />
               <CardContent>
-                <Alumns
-                  cohorte={data && data.cohortes[0]}
-                  loading={loading}
-                  onRefetch={refetch}
-                />
+                <Alumns loading={loading} onRefetch={refetch} ide={id} />
               </CardContent>
             </Card>
           </Grid>
