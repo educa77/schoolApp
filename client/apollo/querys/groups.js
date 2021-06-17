@@ -21,3 +21,11 @@ export const COUNT_GROUPS = gql`
     countGroups(where: $where)
   }
 `;
+
+export const GROUP_BY_ID = gql`
+  query groups($id: Int) {
+    groups(id: $id) {
+      name
+    }
+  }
+`;

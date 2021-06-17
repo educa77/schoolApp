@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { Tabla } from "../../../components/Tabla";
 import Router from "next/router";
-import { CREATE_GROUP } from "../../../apollo/Mutations/groups";
+import { CREATE_GROUP, DELETE_GROUP } from "../../../apollo/Mutations/groups";
 import { ADD_GROUP_TO_COHORTE } from "../../../apollo/Mutations/cohortes";
 import { GROUPS, COUNT_GROUPS } from "../../../apollo/querys/groups";
 
@@ -21,17 +21,22 @@ function Groups({
   const [executeCount, { data: count }] = useLazyQuery(COUNT_GROUPS);
 
   const [createGroup, { loading: createLoading }] = useMutation(CREATE_GROUP);
+
+  const [deleteMutation, { loading: deleteLoading, data: message }] =
+    useMutation(DELETE_GROUP);
+
   const [addGroupToCohorte, { loading: addLoading }] =
     useMutation(ADD_GROUP_TO_COHORTE);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  function onChangePage(_, page) {
+
+  const onChangePage = (_, page) => {
     setPage(page);
-  }
-  function onChangeRowsPerPage(e) {
+  };
+  const onChangeRowsPerPage = (e) => {
     setRowsPerPage(e.target.value);
-  }
+  };
 
   const variables = useMemo(
     () => ({
@@ -52,8 +57,13 @@ function Groups({
   }, [cohorte, execute, executeCount, variables]);
 
   const loading = useMemo(
-    () => queryLoading || componentLoading || createLoading || addLoading,
-    [queryLoading, componentLoading, createLoading, addLoading]
+    () =>
+      queryLoading ||
+      componentLoading ||
+      createLoading ||
+      addLoading ||
+      deleteLoading,
+    [queryLoading, componentLoading, createLoading, addLoading, deleteLoading]
   );
 
   const data = useMemo(
@@ -61,7 +71,7 @@ function Groups({
       preData?.groups.map((grupo) => {
         const grupototal = { ...grupo, qty: grupo?.students?.length };
         return grupototal;
-      }) || componentData?.cohortes[0].groups,
+      }) /* || componentData?.cohortes[0].groups */,
     [preData, componentData]
   );
 
@@ -101,6 +111,13 @@ function Groups({
             else onRefetch && onRefetch();
           },
           inputs: [{ key: "name", label: "Nombre" }],
+        },
+        delete: {
+          onSubmit: async (values) => {
+            await deleteMutation({ variables: { id: values } });
+            if (cohorte) preRefetch();
+            else onRefetch && onRefetch();
+          },
         },
       },
     }),

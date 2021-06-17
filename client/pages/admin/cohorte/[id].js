@@ -45,10 +45,9 @@ function CohortesDetail({ className }) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  console.log(data, "data de id");
   return (
     <Container style={{ paddingTop: "1rem" }}>
-      {
+      {data && (
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <Card variant="outlined">
@@ -115,12 +114,12 @@ function CohortesDetail({ className }) {
             <Card variant="outlined" style={{ position: "relative" }}>
               <CardHeader title="Alumnos" />
               <CardContent>
-                <Alumns loading={loading} onRefetch={refetch} ide={id} />
+                <Alumns loading={loading} ide={id} />
               </CardContent>
             </Card>
           </Grid>
         </Grid>
-      }
+      )}
     </Container>
   );
 }
@@ -142,3 +141,8 @@ const CohorteDetailItem = styled.div`
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   }
 `;
+
+CohortesDetail.renderData = {
+  authRequired: true,
+  currentView: "Cohortes",
+};

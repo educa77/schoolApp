@@ -88,19 +88,16 @@ function Cohortes() {
           key: "groups",
           label: "Grupos",
           align: "left",
-          component: (cohorte) => <GroupsComponent cohorte={cohorte} />,
+          component: (cohorte) => (
+            <GroupsComponent cohorte={cohorte} loading={loading} data={data} />
+          ),
         },
         {
           key: "alumns",
           label: "Alumnos",
           align: "left",
           component: (cohorte) => (
-            <AlumnsComponent
-              cohorte={cohorte}
-              onRefetch={fetch}
-              loading={loading}
-              data={data}
-            />
+            <AlumnsComponent cohorte={cohorte} loading={loading} data={data} />
           ),
         },
       ],
@@ -257,23 +254,34 @@ function AlumnsComponent({ data, cohorte }) {
     </>
   );
 }
-function GroupsComponent(cohorte) {
+function GroupsComponent({ cohorte, data }) {
   const [show, setShow] = useState(false);
+  const { refetch } = useQuery(COHORTES);
+
   return (
     <>
-      <Button onClick={() => setShow(true)}>{cohorte.cohorte.groups}</Button>
+      <Button onClick={() => setShow(true)}>{cohorte.groups}</Button>
       <Dialog
         open={show}
-        onClose={() => setShow(false)}
+        onClose={() => {
+          setShow(false);
+          refetch();
+        }}
         fullWidth
         maxWidth="md"
       >
         <DialogTitle>Groups</DialogTitle>
         <DialogContent>
-          <Groups cohorte={cohorte.cohorte} />
+          <Groups cohorte={cohorte} data={data} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShow(false)} color="primary">
+          <Button
+            onClick={() => {
+              setShow(false);
+              refetch();
+            }}
+            color="primary"
+          >
             Cerrar
           </Button>
         </DialogActions>

@@ -16,6 +16,7 @@ import Router from "next/router";
 function Alumns({ className, data: componentData, ide }) {
   const [inviteMutation, { loading: addLoading }] =
     useMutation(ADD_USER_TO_COHORTE);
+
   const [deleteMutation, { loading: deleteLoading }] = useMutation(
     DELETE_USER_TO_COHORTE
   );
@@ -35,16 +36,17 @@ function Alumns({ className, data: componentData, ide }) {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  function onChangePage(_, page) {
-    setPage(page);
-  }
-  function onChangeRowsPerPage(e) {
-    setRowsPerPage(e.target.value);
-  }
 
-  function capitalizeFirstLetter(string) {
+  const onChangePage = (_, page) => {
+    setPage(page);
+  };
+  const onChangeRowsPerPage = (e) => {
+    setRowsPerPage(e.target.value);
+  };
+
+  const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
-  }
+  };
   if (componentData) {
     const variablesId = {
       id: componentData[0]?.id,

@@ -20,8 +20,8 @@ import {
   StyledTableRow,
   useStyles,
 } from "./style";
-import styles from "./Tabla.module.scss";
 import { Add, Delete, Edit, Visibility } from "@material-ui/icons";
+import styled from "styled-components";
 
 export default function Tabla({
   loading,
@@ -155,9 +155,9 @@ export default function Tabla({
           </Table>
         ) : (
           !loading && (
-            <div className={styles.empty}>
+            <Empty>
               <img src="admin/assets/empty.svg" alt="sin datos" />
-              <div className={styles.info}>
+              <div className="info">
                 {data.actions?.create && (
                   <StyledAddButton
                     size="large"
@@ -168,7 +168,7 @@ export default function Tabla({
                   </StyledAddButton>
                 )}
               </div>
-            </div>
+            </Empty>
           )
         )}
         {data.actions && data.actions.create && (
@@ -193,3 +193,24 @@ export default function Tabla({
     </>
   );
 }
+
+const Empty = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  img,
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+  }
+`;
