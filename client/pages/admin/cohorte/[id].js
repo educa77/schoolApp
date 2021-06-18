@@ -7,17 +7,11 @@ import {
 } from "../../../apollo/Mutations/cohortes";
 import Groups from "../Cohortes/groups";
 import Alumns from "../Cohortes/Alumns";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Container,
-  Grid,
-} from "@material-ui/core";
+import { Card, CardContent, CardHeader, Grid } from "@material-ui/core";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 
-function CohortesDetail({ className }) {
+function CohortesDetail() {
   const router = useRouter();
   const { id } = router.query;
 
@@ -25,9 +19,15 @@ function CohortesDetail({ className }) {
   const [resultDelete] = useMutation(DELETE_USER_TO_COHORTE);
 
   const variables = { id: parseInt(id) };
-  const { loading, data, refetch } = useQuery(COHORTE_BY_ID, {
+  const { loading, data, refetch, called } = useQuery(COHORTE_BY_ID, {
     variables,
   });
+
+  useEffect(() => {
+    if (!loading && called) {
+      refetch();
+    }
+  }, [data, refetch]);
 
   useEffect(() => {
     if (!resultCreate.loading && resultCreate.called) {
@@ -46,7 +46,7 @@ function CohortesDetail({ className }) {
   };
 
   return (
-    <Container style={{ paddingTop: "1rem" }}>
+    <ContainerBox>
       {data && (
         <Grid container spacing={2}>
           <Grid item xs={6}>
@@ -116,7 +116,7 @@ function CohortesDetail({ className }) {
           </Grid>
         </Grid>
       )}
-    </Container>
+    </ContainerBox>
   );
 }
 
@@ -136,6 +136,11 @@ const CohorteDetailItem = styled.div`
     font-size: 100%;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   }
+`;
+
+const ContainerBox = styled.div`
+  display: flex;
+  margin-left: 3.7rem;
 `;
 
 CohortesDetail.renderData = {

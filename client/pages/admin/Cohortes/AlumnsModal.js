@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useMutation, useLazyQuery, useQuery } from "@apollo/client";
 import { Tabla } from "../../../components/Tabla";
 import { COUNT_USERS } from "../../../apollo/querys/users";
-import { COHORTE_BY_ID } from "../../../apollo/querys/cohortes";
+import { COHORTES } from "../../../apollo/querys/cohortes";
 import {
   ADD_USER_TO_COHORTE,
   DELETE_USER_TO_COHORTE,
@@ -13,22 +13,44 @@ import { useCopyToClipboard } from "react-use";
 import { Alert } from "@material-ui/lab";
 import { useRouter } from "next/router";
 
-function Alumns({ className, data: componentData, ide }) {
+function AlumnsModal({ users, cohorte }) {
   const router = useRouter();
 
-  const [inviteMutation, { loading: addLoading }] =
-    useMutation(ADD_USER_TO_COHORTE);
+  const { refetch } = useQuery(COHORTES);
 
-  const [deleteMutation, { loading: deleteLoading }] = useMutation(
-    DELETE_USER_TO_COHORTE
-  );
+  const [
+    inviteMutation,
+    { loading: addLoading, called: addCalled, refetch: addRefetch },
+  ] = useMutation(ADD_USER_TO_COHORTE);
 
-  const [executeCount, { loading: queryLoading, error, data: count }] =
-    useLazyQuery(COUNT_USERS);
+  const [deleteMutation, { loading: deleteLoading, called: deleteCalled }] =
+    useMutation(DELETE_USER_TO_COHORTE);
+
+  const [
+    executeCount,
+    { loading: queryLoading, error, data: count, called: countCalled },
+  ] = useLazyQuery(COUNT_USERS);
 
   const [{ value: copyValue }, copyToClipboard] = useCopyToClipboard();
-
   const [showSnackbar, setShowSnackbar] = useState(false);
+
+  useEffect(() => {
+    if (!queryLoading && countCalled) {
+      refetch();
+    }
+  }, [count]);
+
+  useEffect(() => {
+    if (!addLoading && addCalled) {
+      refetch();
+    }
+  }, [inviteMutation]);
+
+  useEffect(() => {
+    if (!deleteLoading && deleteCalled) {
+      refetch();
+    }
+  }, [deleteMutation]);
 
   useEffect(() => {
     if (copyValue) {
@@ -50,76 +72,10 @@ function Alumns({ className, data: componentData, ide }) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  if (componentData) {
-    const variables = {
-      id: parseInt(componentData[0]?.id),
-    };
-    var { data: preData, refetch } = useQuery(COHORTE_BY_ID, {
-      variables,
-    });
-    preData = preData?.cohortes?.filter(
-      (ele) => ele.id === parseInt(componentData[0]?.id)
-    );
-  }
-  if (ide) {
-    const variablesId = {
-      id: parseInt(ide),
-    };
-    var { data: preData, refetch } = useQuery(COHORTE_BY_ID, {
-      variablesId,
-    });
-  }
-
-  var cohorteMemo = useMemo(() => {
-    if (ide) {
-      preData = preData?.cohortes?.filter((ele) => ele.id === parseInt(ide));
-    }
-
-    if (Array.isArray(preData?.cohortes)) {
-      return preData.cohortes.map((item) => {
-        return {
-          ...item,
-          name: item.name.toUpperCase(),
-          instructorDisplay: `${
-            capitalizeFirstLetter(item.instructor.givenName) || ""
-          } ${capitalizeFirstLetter(item.instructor.familyName) || ""}`,
-          instructor: item.instructor.id,
-          groups: Array.isArray(item.groups) ? item.groups.length : 0,
-          alumns: Array.isArray(item.users) ? item.users.length : 0,
-          users: item.users,
-        };
-      });
-    } else return preData;
-  }, [preData]);
-
-  var cohorte = useMemo(() => {
-    if (cohorteMemo) return cohorteMemo.pop();
-  }, [cohorteMemo]);
-
-  const variables = useMemo(
-    () => ({
-      where: cohorte ? { Cohorte: { id: cohorte?.id } } : undefined,
-      limit: rowsPerPage,
-      offset: rowsPerPage * page,
-    }),
-    [rowsPerPage, page, cohorte]
-  );
-
-  const loading = useMemo(
-    () => addLoading || queryLoading || deleteLoading,
-    [addLoading, queryLoading, deleteLoading]
-  );
-
-  useEffect(() => {
-    if (cohorte) {
-      executeCount({ variables });
-    }
-  }, [cohorte, executeCount, variables]);
-
   const data = useMemo(
     () =>
-      (cohorte &&
-        cohorte?.users?.map((user) => {
+      (users &&
+        users?.map((user) => {
           var usuario = {
             __typename: user.__typename,
             givenName: user.givenName && capitalizeFirstLetter(user.givenName),
@@ -135,7 +91,12 @@ function Alumns({ className, data: componentData, ide }) {
           return usuario;
         })) ||
       "",
-    [cohorte]
+    [users]
+  );
+
+  const loading = useMemo(
+    () => addLoading || queryLoading || deleteLoading,
+    [addLoading, queryLoading, deleteLoading]
   );
 
   const tableData = useMemo(
@@ -211,20 +172,11 @@ function Alumns({ className, data: componentData, ide }) {
         },
       },
     }),
-    [
-      loading,
-      error,
-      data,
-      copyToClipboard,
-      cohorte?.id,
-      deleteMutation,
-      refetch,
-      inviteMutation,
-    ]
+    [loading, error, data, copyToClipboard, deleteMutation, inviteMutation]
   );
 
   return (
-    <div className={className} style={{ height: "50vh", width: "100%" }}>
+    <div style={{ height: "50vh", width: "100%" }}>
       <Tabla
         loading={loading}
         data={tableData}
@@ -246,4 +198,4 @@ function Alumns({ className, data: componentData, ide }) {
   );
 }
 
-export default Alumns;
+export default AlumnsModal;

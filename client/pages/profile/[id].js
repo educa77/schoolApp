@@ -52,8 +52,6 @@ function Profile() {
     }
   }, [preData, id]);
 
-  console.log(data, "data");
-
   async function handleUpdate(values) {
     await update({
       variables: {

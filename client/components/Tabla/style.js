@@ -39,7 +39,6 @@ export const useStyles = makeStyles({
 
 export const StyledAddButton = withStyles((theme) => ({
   root: {
-    background: "#0e0e0e",
     color: "#fff",
   },
 }))(Button);

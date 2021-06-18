@@ -7,8 +7,9 @@ import {
   DELETE_COHORTE,
   EDIT_COHORTE,
 } from "../../apollo/Mutations/cohortes";
+import { ADD_USER_TO_COHORTE } from "../../apollo/Mutations/users";
 import { getUserRol } from "../../apollo/querys/users";
-import Alumns from "./Cohortes/Alumns";
+import AlumnsModal from "./Cohortes/AlumnsModal";
 import Groups from "./Cohortes/groups";
 import {
   Button,
@@ -21,7 +22,7 @@ import Router from "next/router";
 
 function Cohortes() {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   function onChangePage(_, page) {
     setPage(page);
     refetch({
@@ -51,9 +52,63 @@ function Cohortes() {
   const instructors = useQuery(getUserRol, {
     variables: { role: "instructor" },
   });
-  const [createMutation, resultCreate] = useMutation(CREATE_COHORTE);
-  const [deleteMutation, resultDelete] = useMutation(DELETE_COHORTE);
-  const [updateMutation, resultUpdate] = useMutation(EDIT_COHORTE);
+  const [
+    createMutation,
+    { data: resultCreate, loading: loadingCreate, called: calledCreate },
+  ] = useMutation(CREATE_COHORTE);
+  const [
+    deleteMutation,
+    { data: resultDelete, loading: loadingDelete, called: calledDelete },
+  ] = useMutation(DELETE_COHORTE);
+  const [
+    updateMutation,
+    { data: resultUpdate, loading: loadingUpdate, called: calledUpdate },
+  ] = useMutation(EDIT_COHORTE);
+  const [addUsertoCohorte, resultAdd] = useMutation(ADD_USER_TO_COHORTE);
+
+  const { refetch: refetchRoles } = useQuery(getUserRol, {
+    variables: { role: "instructor" },
+  });
+
+  useEffect(() => {
+    if (!loadingCreate && calledCreate) {
+      refetch();
+    }
+  }, [resultCreate, refetch]);
+
+  useEffect(() => {
+    if (!loadingUpdate && calledUpdate) {
+      refetch();
+    }
+  }, [resultUpdate, refetch]);
+
+  useEffect(() => {
+    if (!loadingDelete && calledDelete) {
+      refetch();
+    }
+  }, [resultDelete, refetch]);
+
+  useEffect(() => {
+    if (resultCreate) {
+      const cohorteId = resultCreate?.createCohorte?.id;
+      const userId = resultCreate?.createCohorte?.instructor?.id;
+      return addUsertoCohorte({
+        variables: { cohorteId: parseInt(cohorteId), userId: parseInt(userId) },
+      });
+    }
+    refetchRoles();
+  }, [resultCreate]);
+
+  useEffect(() => {
+    if (resultUpdate) {
+      const cohorteId = resultUpdate?.editCohorte?.id;
+      const userId = resultUpdate?.editCohorte?.instructor?.id;
+      return addUsertoCohorte({
+        variables: { cohorteId: parseInt(cohorteId), userId: parseInt(userId) },
+      });
+    }
+    refetch();
+  }, [resultUpdate]);
 
   const data = useMemo(() => {
     if (Array.isArray(preData?.cohortes)) {
@@ -89,7 +144,7 @@ function Cohortes() {
           label: "Grupos",
           align: "left",
           component: (cohorte) => (
-            <GroupsComponent cohorte={cohorte} loading={loading} data={data} />
+            <GroupsComponent cohorte={cohorte} data={data} />
           ),
         },
         {
@@ -97,7 +152,7 @@ function Cohortes() {
           label: "Alumnos",
           align: "left",
           component: (cohorte) => (
-            <AlumnsComponent cohorte={cohorte} loading={loading} data={data} />
+            <AlumnsComponent cohorte={cohorte} data={data} />
           ),
         },
       ],
@@ -135,6 +190,7 @@ function Cohortes() {
                 instructor: parseInt(values.instructor),
               },
             });
+            refetch();
           },
           submitButtonLabel: "Crear",
           title: "Crear cohorte",
@@ -166,6 +222,7 @@ function Cohortes() {
                 instructor: parseInt(values.instructor),
               },
             });
+            refetch();
           },
           submitButtonLabel: "Enviar cambios",
           title: "Editar cohorte",
@@ -177,6 +234,7 @@ function Cohortes() {
                 id: parseInt(id),
               },
             });
+            refetch();
           },
         },
         view: {
@@ -192,35 +250,18 @@ function Cohortes() {
       error,
       loading,
       createMutation,
+      refetch,
       deleteMutation,
       updateMutation,
       instructors.data,
     ]
   );
 
-  useEffect(() => {
-    if (!resultCreate.loading && resultCreate.called) {
-      refetch();
-    }
-  }, [resultCreate, refetch]);
-
-  useEffect(() => {
-    if (!resultUpdate.loading && resultUpdate.called) {
-      refetch();
-    }
-  }, [resultUpdate, refetch]);
-
-  useEffect(() => {
-    if (!resultDelete.loading && resultDelete.called) {
-      refetch();
-    }
-  }, [resultDelete, refetch]);
   return (
     <div style={{ height: "calc(100vh - 65px)" }}>
       <Tabla
-        /* loading={loading} */
         data={tableData}
-        count={count?.countCohortes || undefined}
+        count={count?.countCohortes}
         page={page}
         rowsPerPage={rowsPerPage}
         onChangePage={onChangePage}
@@ -232,21 +273,38 @@ function Cohortes() {
 
 function AlumnsComponent({ data, cohorte }) {
   const [show, setShow] = useState(false);
+  const { refetch } = useQuery(COHORTES);
   return (
     <>
-      <Button onClick={() => setShow(true)}>{cohorte.alumns}</Button>
+      <Button
+        onClick={() => {
+          setShow(true);
+          refetch();
+        }}
+      >
+        {cohorte.alumns}
+      </Button>
       <Dialog
         open={show}
-        onClose={() => setShow(false)}
+        onClose={() => {
+          setShow(false);
+          refetch();
+        }}
         fullWidth
         maxWidth="md"
       >
         <DialogTitle>Alumnos</DialogTitle>
         <DialogContent>
-          <Alumns data={data} cohorte={cohorte} />
+          <AlumnsModal data={data} users={cohorte.users} cohorte={cohorte} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShow(false)} color="primary">
+          <Button
+            onClick={() => {
+              setShow(false);
+              refetch();
+            }}
+            color="primary"
+          >
             Cerrar
           </Button>
         </DialogActions>

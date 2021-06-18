@@ -6,6 +6,9 @@ export const CREATE_COHORTE = gql`
       input: { name: $name, startDate: $startDate, instructor: $instructor }
     ) {
       id
+      instructor {
+        id
+      }
     }
   }
 `;
@@ -34,6 +37,9 @@ export const EDIT_COHORTE = gql`
       }
     ) {
       id
+      instructor {
+        id
+      }
     }
   }
 `;
@@ -41,8 +47,6 @@ export const ADD_USER_TO_COHORTE = gql`
   mutation addUsersToCohorte($cohorteId: Int!, $userId: [Int]!) {
     addUsersToCohorte(cohorteId: $cohorteId, userId: $userId) {
       id
-
-
     }
   }
 `;
@@ -56,7 +60,7 @@ export const DELETE_USER_TO_COHORTE = gql`
 `;
 
 export const ADD_GROUP_TO_COHORTE = gql`
-  mutation($cohorteId: Int!, $groupId: [Int]!) {
+  mutation ($cohorteId: Int!, $groupId: [Int]!) {
     addGroupsToCohorte(cohorteId: $cohorteId, groupId: $groupId) {
       id
     }
@@ -64,7 +68,7 @@ export const ADD_GROUP_TO_COHORTE = gql`
 `;
 
 export const REMOVE_GROUP_TO_COHORTE = gql`
-  mutation($cohorteId: Int!, $groupId: [Int]!) {
+  mutation ($cohorteId: Int!, $groupId: [Int]!) {
     removeGroupsFromCohorte(cohorteId: $cohorteId, groupId: $groupId) {
       id
     }

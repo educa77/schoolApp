@@ -44,16 +44,19 @@ function NavBar({ show, children, view }) {
                 user.cohortes.length > 0 &&
                 `/student/cohorte/${user.cohortes[0].id}`
               }
+              active={view === "Cohortes"}
             />
             <NavBarItem
               title="Modulos"
               icon={AssignmentIndRounded}
               to="/student/modules"
+              active={view === "Modulos"}
             />
             <NavBarItem
               title="Grupos"
               icon={GroupWorkIcon}
               to="/student/groups"
+              active={view === "Grupos"}
             />
           </>
         )}
@@ -77,21 +80,25 @@ function NavBar({ show, children, view }) {
               title="Instructores"
               icon={AssignmentIndRounded}
               to="/admin/instructors"
+              active={view === "Instructores"}
             />
             <NavBarItem
               title="PM"
               icon={RecordVoiceOverRounded}
               to="/admin/pm"
+              active={view === "PM"}
             />
             <NavBarItem
               title="Alumnos"
               icon={EmojiPeopleRounded}
               to="/admin/alumns"
+              active={view === "Alumnos"}
             />
             <NavBarItem
               title="Modulos"
               icon={ViewComfyRoundedIcon}
               to="/admin/modules"
+              active={view === "Modulos"}
             />
             <Divider />
           </>

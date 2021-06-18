@@ -16,72 +16,85 @@ export const UPDATE_USER = gql`
   }
 `;
 
-export const ADD_USER_TO_GROUP = gql`
-mutation addUsersToGroups($id: Int, $name: String, $group: GroupInput) {
-  addUsersToGroups(id: $id, name: $name, input: $group) {
-    id
-    name
-    type
-    parent
-    instructor {
+export const ADD_USER_TO_COHORTE = gql`
+  mutation addUsersToCohorte($cohorteId: Int!, $userId: [Int]!) {
+    addUsersToCohorte(cohorteId: $cohorteId, userId: $userId) {
       id
-      nickName
-      familyName
-      givenName
-    }
-    pms {
-      id
-      nickName
-      familyName
-      givenName
-    }
-    staff {
-      id
-      nickName
-      familyName
-      givenName
-    }
-    students {
-      id
-      nickName
-      familyName
-      givenName
+      name
+      startDate
+      instructor {
+        id
+      }
     }
   }
-}
+`;
+
+export const ADD_USER_TO_GROUP = gql`
+  mutation addUsersToGroups($id: Int, $name: String, $group: GroupInput) {
+    addUsersToGroups(id: $id, name: $name, input: $group) {
+      id
+      name
+      type
+      parent
+      instructor {
+        id
+        nickName
+        familyName
+        givenName
+      }
+      pms {
+        id
+        nickName
+        familyName
+        givenName
+      }
+      staff {
+        id
+        nickName
+        familyName
+        givenName
+      }
+      students {
+        id
+        nickName
+        familyName
+        givenName
+      }
+    }
+  }
 `;
 
 export const REMOVE_USER_OF_GROUP = gql`
-mutation removeUsersOfGroups($id: Int!, $name: String, $userId: Int!) {
-  removeUsersOfGroups(id: $id, name: $name, userId: [$userId]) {
-    id
-    name
-    type
-    parent
-    instructor {
+  mutation removeUsersOfGroups($id: Int!, $name: String, $userId: Int!) {
+    removeUsersOfGroups(id: $id, name: $name, userId: [$userId]) {
       id
-      nickName
-      familyName
-      givenName
-    }
-    pms {
-      id
-      nickName
-      familyName
-      givenName
-    }
-    staff {
-      id
-      nickName
-      familyName
-      givenName
-    }
-    students {
-      id
-      nickName
-      familyName
-      givenName
+      name
+      type
+      parent
+      instructor {
+        id
+        nickName
+        familyName
+        givenName
+      }
+      pms {
+        id
+        nickName
+        familyName
+        givenName
+      }
+      staff {
+        id
+        nickName
+        familyName
+        givenName
+      }
+      students {
+        id
+        nickName
+        familyName
+        givenName
+      }
     }
   }
-}
 `;
