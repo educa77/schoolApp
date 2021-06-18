@@ -3,10 +3,9 @@ import { useMutation, useQuery } from "@apollo/client";
 import { Avatar, Container, Grid, makeStyles } from "@material-ui/core";
 import { UPDATE_USER } from "../../apollo/Mutations/users";
 import { USER_BY_ID } from "../../apollo/querys/users";
-import { useSelector } from "react-redux";
-import { useRouter, Router } from "next/router";
-import BasicInfo from "./Profile.BasicInfo";
-import Contact from "./Profile.Contact";
+import { useRouter } from "next/router";
+import BasicInfo from "./profile.BasicInfo";
+import Contact from "./profile.Contact";
 
 const useStyles = makeStyles((theme) => ({
   avatar: {

@@ -18,12 +18,15 @@ export default function Layout({ children, currentView, headerVisibility }) {
   return (
     <div id="root">
       {mounted && user && user.authenticated && (
-        <div id="header" display={headerVisibility}>
-          <Header handleShowMenu={() => setShow(!show)} />
-          <NavBar show={show} display={headerVisibility} view={currentView} />
+        <div id="header">
+          <Header
+            handleShowMenu={() => setShow(!show)}
+            display={headerVisibility}
+          />
+          <NavBar show={show} view={currentView} />
         </div>
       )}
-      {children}
+      <section>{children}</section>
       <footer></footer>
     </div>
   );

@@ -9,8 +9,8 @@ import {
 } from "../../apollo/Mutations/cohortes";
 import { ADD_USER_TO_COHORTE } from "../../apollo/Mutations/users";
 import { getUserRol } from "../../apollo/querys/users";
-import AlumnsModal from "./Cohortes/AlumnsModal";
-import Groups from "./Cohortes/groups";
+import AlumnsModal from "./cohortesUtils/AlumnsModal";
+import Groups from "./cohortesUtils/groups";
 import {
   Button,
   Dialog,

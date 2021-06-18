@@ -41,7 +41,7 @@ function MyApp({ Component, pageProps }) {
     setPreload(false);
   }, []);
 
-  const theme = createMuiTheme({
+  /*   const theme = createMuiTheme({
     palette: {
       primary: {
         main: "#1e1e1e",
@@ -50,7 +50,7 @@ function MyApp({ Component, pageProps }) {
         main: "#ffff01",
       },
     },
-  });
+  }); */
 
   return (
     <>
@@ -61,21 +61,21 @@ function MyApp({ Component, pageProps }) {
       <ResetStyle />
       <PagePreloader visible={preload} />
 
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <Middleware authRequired={Component?.renderData?.authRequired} />
-          <ThemeProvider theme={theme}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <Layout
-                currentView={currentView}
-                headerVisibility={headerVisibility}
-              >
-                <Component {...pageProps} />
-              </Layout>
-            </MuiPickersUtilsProvider>
-          </ThemeProvider>
-        </Provider>
-      </ApolloProvider>
+      <Provider store={store}>
+        <Middleware authRequired={Component?.renderData?.authRequired} />
+        <ApolloProvider client={client}>
+          {/*           <ThemeProvider theme={theme}> */}
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Layout
+              currentView={currentView}
+              headerVisibility={headerVisibility}
+            >
+              <Component {...pageProps} />
+            </Layout>
+          </MuiPickersUtilsProvider>
+          {/*           </ThemeProvider> */}
+        </ApolloProvider>
+      </Provider>
     </>
   );
 }

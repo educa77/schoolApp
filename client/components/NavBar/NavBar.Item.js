@@ -8,23 +8,18 @@ import {
 import useStyles from "./NavBar.Item.styles";
 import { useRouter } from "next/router";
 
-function NavBarItem({ title, icon: Icon, to, exact, active }) {
+function NavBarItem({ title, icon: Icon, to, active }) {
   const classes = useStyles();
   const router = useRouter();
 
-  const selected = useMemo(() => {
-    if (!to) return false;
-  }, [to, exact]);
-
   const handleClick = useCallback(() => {
-    if (to) router.push(to);
+    if (to) router.push(to, null, { shallow: true });
   }, [to]);
 
   return (
     <ListItem
       className={classes.listItem}
       button
-      selected={selected}
       onClick={handleClick}
       selected={active ? active : false}
     >

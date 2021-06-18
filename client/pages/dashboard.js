@@ -24,3 +24,8 @@ const Draw = styled.img`
   max-width: calc(100vw - 10rem);
   max-height: 50vh;
 `;
+
+Dashboard.renderData = {
+  authRequired: true,
+  currentView: "Dashboard",
+};

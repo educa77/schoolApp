@@ -25,20 +25,8 @@ export const useStyles = makeStyles({
   table: {
     //height: 'calc(100vh - 4rem - 1px)'
   },
-  container: {
-    height: "calc(100vh - 4rem - 1px)",
-    maxHeight: "calc(100% - 52px)",
-    marginLeft: "4rem",
-    maxWidth: "calc(100% - 4rem)",
-  },
   botones: {
     display: "flex",
     justifyContent: "flex-end",
   },
 });
-
-export const StyledAddButton = withStyles((theme) => ({
-  root: {
-    color: "#fff",
-  },
-}))(Button);

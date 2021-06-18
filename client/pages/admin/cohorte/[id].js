@@ -5,8 +5,8 @@ import {
   ADD_USER_TO_COHORTE,
   DELETE_USER_TO_COHORTE,
 } from "../../../apollo/Mutations/cohortes";
-import Groups from "../Cohortes/groups";
-import Alumns from "../Cohortes/Alumns";
+import Groups from "../cohortesUtils/groups";
+import Alumns from "../cohortesUtils/Alumns";
 import { Card, CardContent, CardHeader, Grid } from "@material-ui/core";
 import { useRouter } from "next/router";
 import styled from "styled-components";

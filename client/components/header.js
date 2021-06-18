@@ -203,3 +203,8 @@ const LogoutBtn = styled.button`
     border-style: none;
   }
 `;
+
+Header.renderData = {
+  authRequired: true,
+  header: true,
+};

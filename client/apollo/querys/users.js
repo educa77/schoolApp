@@ -80,3 +80,56 @@ export const USER_FULL = gql`
     }
   }
 `;
+
+export const USER_GROUPS = gql`
+  query userFull(
+    $id: Int
+    $where: JSON
+    $limit: Int
+    $offset: Int
+    $order: JSON
+  ) {
+    users(
+      id: $id
+      where: $where
+      limit: $limit
+      offset: $offset
+      order: $order
+    ) {
+      groups {
+        id
+        name
+        type
+        students {
+          id
+          givenName
+          familyName
+          nickName
+          email
+        }
+      }
+    }
+  }
+`;
+export const USER_COHORTES = gql`
+  query userFull(
+    $id: Int
+    $where: JSON
+    $limit: Int
+    $offset: Int
+    $order: JSON
+  ) {
+    users(
+      id: $id
+      where: $where
+      limit: $limit
+      offset: $offset
+      order: $order
+    ) {
+      cohortes {
+        id
+        name
+      }
+    }
+  }
+`;

@@ -1,8 +1,8 @@
 import React, { useMemo, useEffect, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { Tabla } from "../../../components/Tabla";
-import { getUserRol } from "../../../apollo/querys/users";
-import { ADD_ROLE } from "../../../apollo/Mutations/role";
+import { Tabla } from "../../components/Tabla";
+import { getUserRol } from "../../apollo/querys/users";
+import { ADD_ROLE } from "../../apollo/Mutations/role";
 import {
   Button,
   Dialog,
@@ -11,9 +11,9 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 import { useRouter } from "next/router";
-import InstructorCohortes from "../../../components/InstructorCohortes";
+import InstructorCohortes from "../../components/InstructorCohortes";
 
-function Instructors({ className }) {
+function Instructors() {
   const { loading, error, data, refetch, called } = useQuery(getUserRol, {
     variables: { role: "instructor" },
   });
@@ -97,7 +97,7 @@ function Instructors({ className }) {
   );
 
   return (
-    <div className={className}>
+    <div>
       <Tabla data={tableData} />
     </div>
   );
@@ -132,5 +132,5 @@ export default Instructors;
 
 Instructors.renderData = {
   authRequired: true,
-  currentView: "Instructors",
+  currentView: "Instructores",
 };

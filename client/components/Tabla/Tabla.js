@@ -67,7 +67,7 @@ export default function Tabla({
 
   return (
     <>
-      <TableContainer className={classes.container}>
+      <Container>
         {data.data && data.data.length > 0 ? (
           <Table
             stickyHeader
@@ -157,13 +157,13 @@ export default function Tabla({
             <img src="admin/assets/empty.svg" alt="sin datos" />
             <div className="info">
               {data.actions?.create && (
-                <StyledAddButton
-                  size="large"
+                <Button
+                  size="medium"
                   startIcon={<Add />}
                   onClick={data.actions.create.onClick || handleAddClickOpen}
                 >
                   {data.addButtonLabel}
-                </StyledAddButton>
+                </Button>
               )}
             </div>
           </Empty>
@@ -175,7 +175,7 @@ export default function Tabla({
             context={data.actions.create}
           />
         )}
-      </TableContainer>
+      </Container>
       {count && (
         <TablePagination
           rowsPerPageOptions={rowsPerPageOptions}
@@ -210,4 +210,11 @@ const Empty = styled.div`
     left: 0;
     margin: auto;
   }
+`;
+
+const Container = styled.div`
+  height: calc(100vh - 4rem - 1px);
+  max-height: calc(100% - 52px);
+  margin-left: 4rem;
+  max-width: calc(100% - 4rem);
 `;
