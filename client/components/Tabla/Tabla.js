@@ -14,12 +14,7 @@ import { useTheme } from "@material-ui/core/styles";
 
 import DialogDel from "./DialogDel";
 import TableDialog from "./TableDialog";
-import {
-  StyledAddButton,
-  StyledTableCell,
-  StyledTableRow,
-  useStyles,
-} from "./style";
+import { StyledAddButton, StyledTableCell, StyledTableRow, useStyles } from "./style";
 import { Add, Delete, Edit, Visibility } from "@material-ui/icons";
 import styled from "styled-components";
 
@@ -69,11 +64,7 @@ export default function Tabla({
     <>
       <Container>
         {data.data && data.data.length > 0 ? (
-          <Table
-            stickyHeader
-            className={classes.table}
-            aria-label="customized table"
-          >
+          <Table stickyHeader className={classes.table} aria-label="customized table">
             <TableHead>
               <TableRow>
                 {data.columns.map(({ key, label, align }) => (
@@ -86,9 +77,7 @@ export default function Tabla({
                     <Button
                       variant="outlined"
                       startIcon={<Add />}
-                      onClick={
-                        data.actions.create.onClick || handleAddClickOpen
-                      }
+                      onClick={data.actions.create.onClick || handleAddClickOpen}
                     >
                       {data.addButtonLabel}
                     </Button>
@@ -113,9 +102,7 @@ export default function Tabla({
                     {data.actions && (
                       <ButtonGroup>
                         {data.actions.view && (
-                          <Button
-                            onClick={() => data.actions.view.onSubmit(el.id)}
-                          >
+                          <Button onClick={() => data.actions.view.onSubmit(el.id)}>
                             <Visibility />
                           </Button>
                         )}
@@ -169,11 +156,7 @@ export default function Tabla({
           </Empty>
         )}
         {data.actions && data.actions.create && (
-          <TableDialog
-            opened={openAdd}
-            onClose={handleAddClose}
-            context={data.actions.create}
-          />
+          <TableDialog opened={openAdd} onClose={handleAddClose} context={data.actions.create} />
         )}
       </Container>
       {count && (

@@ -12,8 +12,7 @@ const capitalizeFirstLetter = (string) => {
 };
 
 function Groups({ id }) {
-  const [executeUG, { data: dataUG, refetch: fetchAll }] =
-    useLazyQuery(USER_GROUPS);
+  const [executeUG, { data: dataUG, refetch: fetchAll }] = useLazyQuery(USER_GROUPS);
 
   useEffect(() => {
     executeUG({ variables: { id: id } });
@@ -31,8 +30,7 @@ function Groups({ id }) {
 
   const [executeCount, { data: count }] = useLazyQuery(COUNT_GROUPS);
 
-  const [createGroup, { loading: createLoading, called: createCalled }] =
-    useMutation(CREATE_GROUP);
+  const [createGroup, { loading: createLoading, called: createCalled }] = useMutation(CREATE_GROUP);
 
   const [addGroupToCohorte, { loading: loadingAdd, called: calledAdd }] =
     useMutation(ADD_GROUP_TO_COHORTE);
@@ -45,8 +43,7 @@ function Groups({ id }) {
     if (!createLoading && createCalled) fetchAll();
   }, [createGroup]);
 
-  const [deleteMutation, { loading: deleteLoading }] =
-    useMutation(DELETE_GROUP);
+  const [deleteMutation, { loading: deleteLoading }] = useMutation(DELETE_GROUP);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);

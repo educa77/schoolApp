@@ -24,9 +24,7 @@ function InstructorCohortes(datos) {
 
   const usercohorte = useMemo(() => {
     if (datos.datos && Array.isArray(preData?.users)) {
-      const usuario = preData.users.find(
-        (user) => user.id === datos.datos
-      ).cohortes;
+      const usuario = preData.users.find((user) => user.id === datos.datos).cohortes;
       return usuario;
     }
   }, [datos.datos, preData]);

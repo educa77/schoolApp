@@ -2,24 +2,17 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { Tabla } from "../../components/Tabla";
 import { COHORTES, COUNT_COHORTES } from "../../apollo/querys/cohortes";
-import {
-  CREATE_COHORTE,
-  DELETE_COHORTE,
-  EDIT_COHORTE,
-} from "../../apollo/Mutations/cohortes";
+import { CREATE_COHORTE, DELETE_COHORTE, EDIT_COHORTE } from "../../apollo/Mutations/cohortes";
 import { ADD_USER_TO_COHORTE } from "../../apollo/Mutations/users";
 import { getUserRol } from "../../apollo/querys/users";
 import AlumnsModal from "./cohortesUtils/AlumnsModal";
 import Groups from "./cohortesUtils/groups";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@material-ui/core";
 import Router from "next/router";
 
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
 function Cohortes() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -42,28 +35,17 @@ function Cohortes() {
     error,
     data: preData,
     refetch,
-  } = useQuery(COHORTES, {
-    variables: {
-      limit: rowsPerPage,
-      offset: rowsPerPage * page,
-    },
-  });
+  } = useQuery(COHORTES, { variables: { limit: rowsPerPage, offset: rowsPerPage * page } });
   const { data: count } = useQuery(COUNT_COHORTES);
   const instructors = useQuery(getUserRol, {
     variables: { role: "instructor" },
   });
-  const [
-    createMutation,
-    { data: resultCreate, loading: loadingCreate, called: calledCreate },
-  ] = useMutation(CREATE_COHORTE);
-  const [
-    deleteMutation,
-    { data: resultDelete, loading: loadingDelete, called: calledDelete },
-  ] = useMutation(DELETE_COHORTE);
-  const [
-    updateMutation,
-    { data: resultUpdate, loading: loadingUpdate, called: calledUpdate },
-  ] = useMutation(EDIT_COHORTE);
+  const [createMutation, { data: resultCreate, loading: loadingCreate, called: calledCreate }] =
+    useMutation(CREATE_COHORTE);
+  const [deleteMutation, { data: resultDelete, loading: loadingDelete, called: calledDelete }] =
+    useMutation(DELETE_COHORTE);
+  const [updateMutation, { data: resultUpdate, loading: loadingUpdate, called: calledUpdate }] =
+    useMutation(EDIT_COHORTE);
   const [addUsertoCohorte, resultAdd] = useMutation(ADD_USER_TO_COHORTE);
 
   const { refetch: refetchRoles } = useQuery(getUserRol, {
@@ -116,9 +98,9 @@ function Cohortes() {
         return {
           ...item,
           name: item.name.toUpperCase(),
-          instructorDisplay: `${
-            capitalizeFirstLetter(item.instructor.givenName) || ""
-          } ${capitalizeFirstLetter(item.instructor.familyName) || ""}`,
+          instructorDisplay: `${capitalizeFirstLetter(item.instructor.givenName) || ""} ${
+            capitalizeFirstLetter(item.instructor.familyName) || ""
+          }`,
           instructor: item.instructor.id,
           groups: Array.isArray(item.groups) ? item.groups.length : 0,
           alumns: Array.isArray(item.users) ? item.users.length : 0,
@@ -128,9 +110,6 @@ function Cohortes() {
     } else return preData;
   }, [preData]);
 
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
   const tableData = useMemo(
     () => ({
       loading,
@@ -143,17 +122,13 @@ function Cohortes() {
           key: "groups",
           label: "Grupos",
           align: "left",
-          component: (cohorte) => (
-            <GroupsComponent cohorte={cohorte} data={data} />
-          ),
+          component: (cohorte) => <GroupsComponent cohorte={cohorte} data={data} />,
         },
         {
           key: "alumns",
           label: "Alumnos",
           align: "left",
-          component: (cohorte) => (
-            <AlumnsComponent cohorte={cohorte} data={data} />
-          ),
+          component: (cohorte) => <AlumnsComponent cohorte={cohorte} data={data} />,
         },
       ],
       addButtonLabel: "Agregar cohorte",
@@ -172,12 +147,10 @@ function Cohortes() {
               type: "select",
               options: (() => {
                 return instructors.data?.getUserRol
-                  ? instructors.data.getUserRol.map(
-                      ({ givenName, familyName, id }) => ({
-                        value: id,
-                        label: `${givenName} ${familyName}`,
-                      })
-                    )
+                  ? instructors.data.getUserRol.map(({ givenName, familyName, id }) => ({
+                      value: id,
+                      label: `${givenName} ${familyName}`,
+                    }))
                   : [];
               })(),
             },
@@ -204,12 +177,10 @@ function Cohortes() {
               type: "select",
               options: (() => {
                 return instructors.data?.getUserRol
-                  ? instructors.data.getUserRol.map(
-                      ({ givenName, familyName, id }) => ({
-                        value: id,
-                        label: `${givenName} ${familyName}`,
-                      })
-                    )
+                  ? instructors.data.getUserRol.map(({ givenName, familyName, id }) => ({
+                      value: id,
+                      label: `${givenName} ${familyName}`,
+                    }))
                   : [];
               })(),
             },

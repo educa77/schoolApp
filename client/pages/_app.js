@@ -21,9 +21,7 @@ function MyApp({ Component, pageProps }) {
   const currentView = Component?.renderData?.currentView
     ? Component.renderData.currentView
     : "Dashboard";
-  const headerVisibility = Component?.renderData?.header
-    ? Component.renderData.header
-    : "true";
+  const headerVisibility = Component?.renderData?.header ? Component.renderData.header : "true";
 
   // Listen page change
   Router.events.on("routeChangeStart", () => {
@@ -66,10 +64,7 @@ function MyApp({ Component, pageProps }) {
         <ApolloProvider client={client}>
           {/*           <ThemeProvider theme={theme}> */}
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Layout
-              currentView={currentView}
-              headerVisibility={headerVisibility}
-            >
+            <Layout currentView={currentView} headerVisibility={headerVisibility}>
               <Component {...pageProps} />
             </Layout>
           </MuiPickersUtilsProvider>

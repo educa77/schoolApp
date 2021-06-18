@@ -3,10 +3,7 @@ import { useMutation, useLazyQuery, useQuery } from "@apollo/client";
 import { Tabla } from "../../../components/Tabla";
 import { COUNT_USERS } from "../../../apollo/querys/users";
 import { COHORTES } from "../../../apollo/querys/cohortes";
-import {
-  ADD_USER_TO_COHORTE,
-  DELETE_USER_TO_COHORTE,
-} from "../../../apollo/Mutations/cohortes";
+import { ADD_USER_TO_COHORTE, DELETE_USER_TO_COHORTE } from "../../../apollo/Mutations/cohortes";
 import { Button, ButtonGroup, Snackbar } from "@material-ui/core";
 import { MailOutlineRounded, FileCopyRounded } from "@material-ui/icons";
 import { useCopyToClipboard } from "react-use";
@@ -18,18 +15,14 @@ function AlumnsModal({ users, cohorte }) {
 
   const { refetch } = useQuery(COHORTES);
 
-  const [
-    inviteMutation,
-    { loading: addLoading, called: addCalled, refetch: addRefetch },
-  ] = useMutation(ADD_USER_TO_COHORTE);
+  const [inviteMutation, { loading: addLoading, called: addCalled, refetch: addRefetch }] =
+    useMutation(ADD_USER_TO_COHORTE);
 
   const [deleteMutation, { loading: deleteLoading, called: deleteCalled }] =
     useMutation(DELETE_USER_TO_COHORTE);
 
-  const [
-    executeCount,
-    { loading: queryLoading, error, data: count, called: countCalled },
-  ] = useLazyQuery(COUNT_USERS);
+  const [executeCount, { loading: queryLoading, error, data: count, called: countCalled }] =
+    useLazyQuery(COUNT_USERS);
 
   const [{ value: copyValue }, copyToClipboard] = useCopyToClipboard();
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -79,8 +72,7 @@ function AlumnsModal({ users, cohorte }) {
           var usuario = {
             __typename: user.__typename,
             givenName: user.givenName && capitalizeFirstLetter(user.givenName),
-            familyName:
-              user.familyName && capitalizeFirstLetter(user.familyName),
+            familyName: user.familyName && capitalizeFirstLetter(user.familyName),
             email: user.email,
             id: user.id,
             nickName: user.nickName,
@@ -113,10 +105,7 @@ function AlumnsModal({ users, cohorte }) {
           align: "left",
           component: (el) => (
             <ButtonGroup>
-              <Button
-                startIcon={<MailOutlineRounded />}
-                href={`mailto: ${el.email}`}
-              >
+              <Button startIcon={<MailOutlineRounded />} href={`mailto: ${el.email}`}>
                 Enviar
               </Button>
               <Button onClick={() => copyToClipboard(el.email)}>

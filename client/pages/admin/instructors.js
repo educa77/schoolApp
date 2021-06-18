@@ -3,13 +3,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { Tabla } from "../../components/Tabla";
 import { getUserRol } from "../../apollo/querys/users";
 import { ADD_ROLE } from "../../apollo/Mutations/role";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@material-ui/core";
 import { useRouter } from "next/router";
 import InstructorCohortes from "../../components/InstructorCohortes";
 
@@ -108,12 +102,7 @@ function CohorteNames(data) {
   return (
     <>
       <Button onClick={() => setShow(true)}>{data.data.cohortes}</Button>
-      <Dialog
-        open={show}
-        onClose={() => setShow(false)}
-        fullWidth
-        maxWidth="md"
-      >
+      <Dialog open={show} onClose={() => setShow(false)} fullWidth maxWidth="md">
         <DialogTitle>Cohortes</DialogTitle>
         <DialogContent>
           <InstructorCohortes datos={data.data.id} />

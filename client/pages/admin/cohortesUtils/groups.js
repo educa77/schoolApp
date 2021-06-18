@@ -6,27 +6,17 @@ import { CREATE_GROUP, DELETE_GROUP } from "../../../apollo/Mutations/groups";
 import { ADD_GROUP_TO_COHORTE } from "../../../apollo/Mutations/cohortes";
 import { GROUPS, COUNT_GROUPS } from "../../../apollo/querys/groups";
 
-function Groups({
-  className,
-  cohorte,
-  data: componentData,
-  loading: componentLoading,
-  onRefetch,
-}) {
-  const [
-    execute,
-    { loading: queryLoading, error, data: preData, refetch: preRefetch },
-  ] = useLazyQuery(GROUPS);
+function Groups({ className, cohorte, data: componentData, loading: componentLoading, onRefetch }) {
+  const [execute, { loading: queryLoading, error, data: preData, refetch: preRefetch }] =
+    useLazyQuery(GROUPS);
 
   const [executeCount, { data: count }] = useLazyQuery(COUNT_GROUPS);
 
   const [createGroup, { loading: createLoading }] = useMutation(CREATE_GROUP);
 
-  const [deleteMutation, { loading: deleteLoading, data: message }] =
-    useMutation(DELETE_GROUP);
+  const [deleteMutation, { loading: deleteLoading, data: message }] = useMutation(DELETE_GROUP);
 
-  const [addGroupToCohorte, { loading: addLoading }] =
-    useMutation(ADD_GROUP_TO_COHORTE);
+  const [addGroupToCohorte, { loading: addLoading }] = useMutation(ADD_GROUP_TO_COHORTE);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -57,12 +47,7 @@ function Groups({
   }, [cohorte, execute, executeCount, variables]);
 
   const loading = useMemo(
-    () =>
-      queryLoading ||
-      componentLoading ||
-      createLoading ||
-      addLoading ||
-      deleteLoading,
+    () => queryLoading || componentLoading || createLoading || addLoading || deleteLoading,
     [queryLoading, componentLoading, createLoading, addLoading, deleteLoading]
   );
 
@@ -121,16 +106,7 @@ function Groups({
         },
       },
     }),
-    [
-      data,
-      error,
-      loading,
-      createGroup,
-      addGroupToCohorte,
-      onRefetch,
-      preRefetch,
-      cohorte,
-    ]
+    [data, error, loading, createGroup, addGroupToCohorte, onRefetch, preRefetch, cohorte]
   );
 
   return (

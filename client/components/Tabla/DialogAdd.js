@@ -20,16 +20,10 @@ function DialogAdd({ create, openAdd, handleAddClose, columnas }) {
   };
 
   return (
-    <Dialog
-      open={openAdd}
-      onClose={handleAddClose}
-      aria-labelledby="form-dialog-title"
-    >
+    <Dialog open={openAdd} onClose={handleAddClose} aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">Agregar</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          Por favor, introduzca los datos correspondientes.
-        </DialogContentText>
+        <DialogContentText>Por favor, introduzca los datos correspondientes.</DialogContentText>
         {create.inputs &&
           create.inputs.map((input) => (
             <Field

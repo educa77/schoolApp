@@ -37,20 +37,8 @@ export const USER_BY_ID = gql`
   }
 `;
 export const USER_FULL = gql`
-  query userFull(
-    $id: Int
-    $where: JSON
-    $limit: Int
-    $offset: Int
-    $order: JSON
-  ) {
-    users(
-      id: $id
-      where: $where
-      limit: $limit
-      offset: $offset
-      order: $order
-    ) {
+  query userFull($id: Int, $where: JSON, $limit: Int, $offset: Int, $order: JSON) {
+    users(id: $id, where: $where, limit: $limit, offset: $offset, order: $order) {
       id
       givenName
       familyName
@@ -82,20 +70,8 @@ export const USER_FULL = gql`
 `;
 
 export const USER_GROUPS = gql`
-  query userFull(
-    $id: Int
-    $where: JSON
-    $limit: Int
-    $offset: Int
-    $order: JSON
-  ) {
-    users(
-      id: $id
-      where: $where
-      limit: $limit
-      offset: $offset
-      order: $order
-    ) {
+  query userFull($id: Int, $where: JSON, $limit: Int, $offset: Int, $order: JSON) {
+    users(id: $id, where: $where, limit: $limit, offset: $offset, order: $order) {
       groups {
         id
         name
@@ -112,20 +88,8 @@ export const USER_GROUPS = gql`
   }
 `;
 export const USER_COHORTES = gql`
-  query userFull(
-    $id: Int
-    $where: JSON
-    $limit: Int
-    $offset: Int
-    $order: JSON
-  ) {
-    users(
-      id: $id
-      where: $where
-      limit: $limit
-      offset: $offset
-      order: $order
-    ) {
+  query userFull($id: Int, $where: JSON, $limit: Int, $offset: Int, $order: JSON) {
+    users(id: $id, where: $where, limit: $limit, offset: $offset, order: $order) {
       cohortes {
         id
         name

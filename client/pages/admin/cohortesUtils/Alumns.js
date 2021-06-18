@@ -3,10 +3,7 @@ import { useMutation, useLazyQuery, useQuery } from "@apollo/client";
 import { Tabla } from "../../../components/Tabla";
 import { COUNT_USERS } from "../../../apollo/querys/users";
 import { COHORTE_BY_ID } from "../../../apollo/querys/cohortes";
-import {
-  ADD_USER_TO_COHORTE,
-  DELETE_USER_TO_COHORTE,
-} from "../../../apollo/Mutations/cohortes";
+import { ADD_USER_TO_COHORTE, DELETE_USER_TO_COHORTE } from "../../../apollo/Mutations/cohortes";
 import { Button, ButtonGroup, Snackbar } from "@material-ui/core";
 import { MailOutlineRounded, FileCopyRounded } from "@material-ui/icons";
 import { useCopyToClipboard } from "react-use";
@@ -16,15 +13,11 @@ import { useRouter } from "next/router";
 function Alumns({ className, data: componentData, ide }) {
   const router = useRouter();
 
-  const [inviteMutation, { loading: addLoading }] =
-    useMutation(ADD_USER_TO_COHORTE);
+  const [inviteMutation, { loading: addLoading }] = useMutation(ADD_USER_TO_COHORTE);
 
-  const [deleteMutation, { loading: deleteLoading }] = useMutation(
-    DELETE_USER_TO_COHORTE
-  );
+  const [deleteMutation, { loading: deleteLoading }] = useMutation(DELETE_USER_TO_COHORTE);
 
-  const [executeCount, { loading: queryLoading, error, data: count }] =
-    useLazyQuery(COUNT_USERS);
+  const [executeCount, { loading: queryLoading, error, data: count }] = useLazyQuery(COUNT_USERS);
 
   const [{ value: copyValue }, copyToClipboard] = useCopyToClipboard();
 
@@ -57,9 +50,7 @@ function Alumns({ className, data: componentData, ide }) {
     var { data: preData, refetch } = useQuery(COHORTE_BY_ID, {
       variables,
     });
-    preData = preData?.cohortes?.filter(
-      (ele) => ele.id === parseInt(componentData[0]?.id)
-    );
+    preData = preData?.cohortes?.filter((ele) => ele.id === parseInt(componentData[0]?.id));
   }
   if (ide) {
     const variablesId = {
@@ -80,9 +71,9 @@ function Alumns({ className, data: componentData, ide }) {
         return {
           ...item,
           name: item.name.toUpperCase(),
-          instructorDisplay: `${
-            capitalizeFirstLetter(item.instructor.givenName) || ""
-          } ${capitalizeFirstLetter(item.instructor.familyName) || ""}`,
+          instructorDisplay: `${capitalizeFirstLetter(item.instructor.givenName) || ""} ${
+            capitalizeFirstLetter(item.instructor.familyName) || ""
+          }`,
           instructor: item.instructor.id,
           groups: Array.isArray(item.groups) ? item.groups.length : 0,
           alumns: Array.isArray(item.users) ? item.users.length : 0,
@@ -123,8 +114,7 @@ function Alumns({ className, data: componentData, ide }) {
           var usuario = {
             __typename: user.__typename,
             givenName: user.givenName && capitalizeFirstLetter(user.givenName),
-            familyName:
-              user.familyName && capitalizeFirstLetter(user.familyName),
+            familyName: user.familyName && capitalizeFirstLetter(user.familyName),
             email: user.email,
             id: user.id,
             nickName: user.nickName,
@@ -152,10 +142,7 @@ function Alumns({ className, data: componentData, ide }) {
           align: "left",
           component: (el) => (
             <ButtonGroup>
-              <Button
-                startIcon={<MailOutlineRounded />}
-                href={`mailto: ${el.email}`}
-              >
+              <Button startIcon={<MailOutlineRounded />} href={`mailto: ${el.email}`}>
                 Enviar
               </Button>
               <Button onClick={() => copyToClipboard(el.email)}>
@@ -211,16 +198,7 @@ function Alumns({ className, data: componentData, ide }) {
         },
       },
     }),
-    [
-      loading,
-      error,
-      data,
-      copyToClipboard,
-      cohorte?.id,
-      deleteMutation,
-      refetch,
-      inviteMutation,
-    ]
+    [loading, error, data, copyToClipboard, cohorte?.id, deleteMutation, refetch, inviteMutation]
   );
 
   return (

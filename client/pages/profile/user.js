@@ -69,9 +69,7 @@ function Profile() {
           <Grid container>
             <Grid container item xs={12} spacing={2}>
               <Grid item container xs={12} justify="center">
-                {data && (
-                  <Avatar className={classes.avatar} src={data.photoUrl} />
-                )}
+                {data && <Avatar className={classes.avatar} src={data.photoUrl} />}
               </Grid>
               <Grid item xs={12}>
                 {data && (
@@ -84,11 +82,7 @@ function Profile() {
               </Grid>
               <Grid item xs={12}>
                 {data && (
-                  <Contact
-                    onSubmit={handleUpdate}
-                    data={data}
-                    onlyView={data.id ? true : false}
-                  />
+                  <Contact onSubmit={handleUpdate} data={data} onlyView={data.id ? true : false} />
                 )}
               </Grid>
             </Grid>

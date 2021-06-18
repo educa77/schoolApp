@@ -2,9 +2,7 @@ import { gql } from "@apollo/client";
 
 export const CREATE_COHORTE = gql`
   mutation createCohorte($name: String, $startDate: String, $instructor: Int) {
-    createCohorte(
-      input: { name: $name, startDate: $startDate, instructor: $instructor }
-    ) {
+    createCohorte(input: { name: $name, startDate: $startDate, instructor: $instructor }) {
       id
       instructor {
         id
@@ -22,20 +20,8 @@ export const DELETE_COHORTE = gql`
 `;
 
 export const EDIT_COHORTE = gql`
-  mutation editCohorte(
-    $id: Int
-    $name: String
-    $startDate: String
-    $instructor: Int
-  ) {
-    editCohorte(
-      input: {
-        id: $id
-        name: $name
-        startDate: $startDate
-        instructor: $instructor
-      }
-    ) {
+  mutation editCohorte($id: Int, $name: String, $startDate: String, $instructor: Int) {
+    editCohorte(input: { id: $id, name: $name, startDate: $startDate, instructor: $instructor }) {
       id
       instructor {
         id

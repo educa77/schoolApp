@@ -40,10 +40,7 @@ function NavBar({ show, children, view }) {
             <NavBarItem
               title="Cohortes"
               icon={ClassRounded}
-              to={
-                user.cohortes.length > 0 &&
-                `/student/cohorte/${user.cohortes[0].id}`
-              }
+              to={user.cohortes.length > 0 && `/student/cohorte/${user.cohortes[0].id}`}
               active={view === "Cohortes"}
             />
             <NavBarItem

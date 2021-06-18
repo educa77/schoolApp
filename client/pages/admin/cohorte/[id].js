@@ -1,10 +1,7 @@
 import React, { useEffect } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { COHORTE_BY_ID } from "../../../apollo/querys/cohortes";
-import {
-  ADD_USER_TO_COHORTE,
-  DELETE_USER_TO_COHORTE,
-} from "../../../apollo/Mutations/cohortes";
+import { ADD_USER_TO_COHORTE, DELETE_USER_TO_COHORTE } from "../../../apollo/Mutations/cohortes";
 import Groups from "../cohortesUtils/groups";
 import Alumns from "../cohortesUtils/Alumns";
 import { Card, CardContent, CardHeader, Grid } from "@material-ui/core";
@@ -72,22 +69,15 @@ function CohortesDetail() {
                     <p>Nombre del instructor: </p>
                     <span>
                       {data &&
-                        capitalizeFirstLetter(
-                          data.cohortes[0].instructor.givenName
-                        ) +
+                        capitalizeFirstLetter(data.cohortes[0].instructor.givenName) +
                           " " +
-                          capitalizeFirstLetter(
-                            data.cohortes[0].instructor.familyName
-                          )}
+                          capitalizeFirstLetter(data.cohortes[0].instructor.familyName)}
                     </span>
                   </CohorteDetailItem>
                   <CohorteDetailItem>
                     <p>Fecha de inicio: </p>
                     <span>
-                      {data &&
-                        new Date(
-                          Number(data.cohortes[0].startDate)
-                        ).toLocaleDateString()}
+                      {data && new Date(Number(data.cohortes[0].startDate)).toLocaleDateString()}
                     </span>
                   </CohorteDetailItem>
                   <CohorteDetailItem>

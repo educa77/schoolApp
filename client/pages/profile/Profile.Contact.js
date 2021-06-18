@@ -17,11 +17,7 @@ function Contact({ data, onSubmit, onlyView }) {
       onlyView={onlyView}
       actions={
         readOnly ? (
-          <Button
-            type="button"
-            variant="outlined"
-            onClick={() => setReadOnly(false)}
-          >
+          <Button type="button" variant="outlined" onClick={() => setReadOnly(false)}>
             Editar
           </Button>
         ) : (

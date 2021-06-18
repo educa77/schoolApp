@@ -6,8 +6,7 @@ export const ProgressBarWrapper = styled.article`
   width: 100%;
   max-width: ${({ maxWidth }) => (maxWidth > 0 ? maxWidth + "px" : "100%")};
   height: ${({ height }) => (height > 0 ? height + "px" : "4px")};
-  background-color: ${({ light }) =>
-    light ? "rgba(255,255,255,0.5)" : colors.darkGray};
+  background-color: ${({ light }) => (light ? "rgba(255,255,255,0.5)" : colors.darkGray)};
   display: ${({ inline }) => (inline ? "inline-block" : "block")};
   margin: ${({ inline }) => (inline ? "0" : "20px auto")};
 `;
