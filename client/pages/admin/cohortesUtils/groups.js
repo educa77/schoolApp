@@ -114,7 +114,7 @@ function Groups({ className, cohorte, data: componentData, loading: componentLoa
       <Tabla
         loading={loading}
         data={tableData}
-        count={count?.countGroups || undefined}
+        count={count?.countGroups}
         page={page}
         rowsPerPage={rowsPerPage}
         onChangePage={onChangePage}

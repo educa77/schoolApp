@@ -14,26 +14,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 function Profile() {
   const classes = useStyles();
   const router = useRouter();
   const { id } = router.query;
 
-  const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
-
   const variables = { id: parseInt(id) };
 
-  const {
-    loading,
-    data: preData,
-    refetch,
-  } = useQuery(USER_BY_ID, {
-    variables,
-  });
-
-  const [update, updateResponse] = useMutation(UPDATE_USER);
+  const { loading, data: preData, refetch } = useQuery(USER_BY_ID, { variables });
+  const [update] = useMutation(UPDATE_USER);
 
   const data = useMemo(() => {
     if (!loading && preData) {
@@ -52,12 +45,7 @@ function Profile() {
   }, [preData, id]);
 
   async function handleUpdate(values) {
-    await update({
-      variables: {
-        id: uid,
-        user: { ...values },
-      },
-    });
+    await update({ variables: { id: uid, user: { ...values } } });
     refetch();
   }
 
@@ -68,9 +56,7 @@ function Profile() {
           <Grid container>
             <Grid container item xs={12} spacing={2}>
               <Grid item container xs={12} justify="center">
-                {data && (
-                  <Avatar className={classes.avatar} src={data.photoUrl} />
-                )}
+                {data && <Avatar className={classes.avatar} src={data.photoUrl} />}
               </Grid>
               <Grid item xs={12}>
                 {data && (
@@ -83,11 +69,7 @@ function Profile() {
               </Grid>
               <Grid item xs={12}>
                 {data && (
-                  <Contact
-                    onSubmit={handleUpdate}
-                    data={data}
-                    onlyView={data.id ? true : false}
-                  />
+                  <Contact onSubmit={handleUpdate} data={data} onlyView={data.id ? true : false} />
                 )}
               </Grid>
             </Grid>

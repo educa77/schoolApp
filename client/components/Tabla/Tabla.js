@@ -163,7 +163,7 @@ export default function Tabla({
         <TablePagination
           rowsPerPageOptions={rowsPerPageOptions}
           component="div"
-          count={Math.ceil(count / 5) || undefined}
+          count={count}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={onChangePage}

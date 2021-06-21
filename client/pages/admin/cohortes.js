@@ -16,26 +16,36 @@ const capitalizeFirstLetter = (string) => {
 function Cohortes() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  function onChangePage(_, page) {
-    setPage(page);
-    refetch({
-      limit: rowsPerPage,
-      offset: rowsPerPage * page,
-    });
-  }
-  function onChangeRowsPerPage(e) {
-    setRowsPerPage(e.target.value);
-    refetch({
-      limit: rowsPerPage,
-      offset: rowsPerPage * page,
-    });
-  }
+
   const {
     loading,
     error,
     data: preData,
     refetch,
   } = useQuery(COHORTES, { variables: { limit: rowsPerPage, offset: rowsPerPage * page } });
+
+  const handleChangePage = (e, page) => {
+    setPage(page);
+    refetch({
+      limit: rowsPerPage,
+      offset: rowsPerPage * page,
+    });
+  };
+  const onChangeRowsPerPage = (e) => {
+    setRowsPerPage(e.target.value);
+    refetch({
+      limit: rowsPerPage,
+      offset: rowsPerPage * page,
+    });
+    refetch();
+  };
+
+  useEffect(() => {
+    refetch();
+  }, [preData]);
+
+  console.log(preData, "preData");
+
   const { data: count } = useQuery(COUNT_COHORTES);
   const instructors = useQuery(getUserRol, {
     variables: { role: "instructor" },
@@ -235,7 +245,7 @@ function Cohortes() {
         count={count?.countCohortes}
         page={page}
         rowsPerPage={rowsPerPage}
-        onChangePage={onChangePage}
+        onChangePage={handleChangePage}
         onChangeRowsPerPage={onChangeRowsPerPage}
       />
     </div>
