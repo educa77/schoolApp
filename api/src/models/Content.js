@@ -1,12 +1,15 @@
 module.exports = (sequelize, DataTypes) =>
-   sequelize.define("content", {
-      topicName: {
-         type: DataTypes.STRING,
-      },
-      durationTime: {
-         type: DataTypes.INTEGER,
-      },
-      readme:{
-         type: DataTypes.TEXT
-      },
-   });
+    sequelize.define("content", {
+        topicName: {
+            type: DataTypes.STRING,
+        },
+        durationTime: {
+            type: DataTypes.INTEGER,
+        },
+        readme: {
+            type: DataTypes.TEXT,
+        },
+        moduleId: {
+            type: DataTypes.INTEGER,
+        },
+    });

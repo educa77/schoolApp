@@ -32,16 +32,16 @@ const postModels = require("./models/Posts");
   }
 ); */
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
-  host: DB_HOST,
-  dialect: "postgres",
-  operatorsAliases: false,
+    host: DB_HOST,
+    dialect: "postgres",
+    operatorsAliases: false,
 
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000,
-  },
+    pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000,
+    },
 });
 
 // ========================== FIN Conexion a la BD ==========================
@@ -85,7 +85,9 @@ Cohorte.belongsToMany(Module, { through: "modules_cohorte" });
 Module.belongsToMany(Cohorte, { through: "modules_cohorte" });
 
 // Relacion Contenidos y Modulos
-Module.hasMany(Content);
+Module.hasMany(Content, {
+    foreignKey: "moduleId",
+});
 Content.belongsTo(Module);
 
 // Relacion CheckPoint y Modulos
@@ -105,7 +107,9 @@ Cohorte.hasMany(Group);
 Group.belongsTo(Cohorte);
 
 //Relacion entre Clases y Contenidos.
-Content.hasMany(Lesson);
+Content.hasMany(Lesson, {
+    foreignKey: "contentId",
+});
 Lesson.belongsTo(Content);
 
 // Relacion usuarios y reviews
@@ -131,72 +135,72 @@ Post.belongsTo(Group);
 // CREACIÓN DE LOS ROLES
 
 const createRoles = async () => {
-  let staffRole = await Role.findOne({ where: { name: "staff" } });
-  let instructorRole = await Role.findOne({
-    where: { name: "instructor" },
-  });
-  let pmRole = await Role.findOne({ where: { name: "pm" } });
-  let alumnoRole = await Role.findOne({ where: { name: "student" } });
+    let staffRole = await Role.findOne({ where: { name: "staff" } });
+    let instructorRole = await Role.findOne({
+        where: { name: "instructor" },
+    });
+    let pmRole = await Role.findOne({ where: { name: "pm" } });
+    let alumnoRole = await Role.findOne({ where: { name: "student" } });
 
-  if (!staffRole) {
-    staffRole = await Role.create({ name: "staff" });
-  }
-  if (!instructorRole) {
-    instructorRole = await Role.create({ name: "instructor" });
-  }
-  if (!pmRole) {
-    pmRole = await Role.create({ name: "pm" });
-  }
-  if (!alumnoRole) {
-    alumnoRole = await Role.create({ name: "student" });
-  }
+    if (!staffRole) {
+        staffRole = await Role.create({ name: "staff" });
+    }
+    if (!instructorRole) {
+        instructorRole = await Role.create({ name: "instructor" });
+    }
+    if (!pmRole) {
+        pmRole = await Role.create({ name: "pm" });
+    }
+    if (!alumnoRole) {
+        alumnoRole = await Role.create({ name: "student" });
+    }
 
-  const RootUser = await User.findOne({
-    where: { email: "rootuser@root.com" },
-  });
-
-  if (!RootUser) {
-    const RootUser = await User.create({
-      givenName: "root",
-      familyName: "root",
-      nickName: "root",
-      email: "rootuser@root.com",
-      password: "123456789",
+    const RootUser = await User.findOne({
+        where: { email: "rootuser@root.com" },
     });
 
-    RootUser.addRole(staffRole);
-  }
+    if (!RootUser) {
+        const RootUser = await User.create({
+            givenName: "root",
+            familyName: "root",
+            nickName: "root",
+            email: "rootuser@root.com",
+            password: "123456789",
+        });
+
+        RootUser.addRole(staffRole);
+    }
 };
 
 function parseWhere(where) {
-  for (let prop in where) {
-    const splitProp = prop.split("_");
-    if (splitProp.length === 2) {
-      where[splitProp[0]] = {
-        [Op[splitProp[1]]]: where[prop],
-      };
-      delete where[prop];
+    for (let prop in where) {
+        const splitProp = prop.split("_");
+        if (splitProp.length === 2) {
+            where[splitProp[0]] = {
+                [Op[splitProp[1]]]: where[prop],
+            };
+            delete where[prop];
+        }
     }
-  }
-  return where;
+    return where;
 }
 
 module.exports = {
-  conn: sequelize,
-  parseWhere,
-  Op,
-  DataTypes,
-  Cohorte,
-  User,
-  Role,
-  createRoles,
-  Score,
-  Content,
-  CheckPoint,
-  Module,
-  Group,
-  MatesScoreType,
-  MateReview,
-  Lesson,
-  Post,
+    conn: sequelize,
+    parseWhere,
+    Op,
+    DataTypes,
+    Cohorte,
+    User,
+    Role,
+    createRoles,
+    Score,
+    Content,
+    CheckPoint,
+    Module,
+    Group,
+    MatesScoreType,
+    MateReview,
+    Lesson,
+    Post,
 };
