@@ -17,8 +17,6 @@ const ContentsScreen = () => {
         }
     }, []);
 
-    console.log(preData, "preData");
-
     const data = useMemo(() => {
         if (preData) {
             return preData.modules.map((e) => {
@@ -52,7 +50,12 @@ const ContentsScreen = () => {
                     submitButtonLabel: "Crear",
                     title: "Crear contenido",
                 },
-
+                update: {
+                    onSubmit: ({ id }) => {
+                        router.push(`/admin/module/update/${id}`);
+                    },
+                    title: "Desea editar el contenido?",
+                },
                 view: {
                     onSubmit: (id) => {
                         router.push(`/admin/module/content/${id}`);

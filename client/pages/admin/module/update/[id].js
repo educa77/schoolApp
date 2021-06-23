@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
 import { CONTENT_ID } from "../../../../apollo/querys/contents";
 import { useRouter } from "next/router";
-import { CREATE_CONTENT } from "../../../../apollo/Mutations/content";
+import { UPDATE_CONTENT } from "../../../../apollo/Mutations/content";
 import { MODULES } from "../../../../apollo/querys/modules";
 import { TextField } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -12,6 +12,7 @@ import styled from "styled-components";
 import ReactMde from "react-mde";
 import * as Showdown from "showdown";
 import "react-mde/lib/styles/css/react-mde-all.css";
+import { DataUsageSharp } from "@material-ui/icons";
 
 function ContentDetail() {
     const router = useRouter();
@@ -21,17 +22,18 @@ function ContentDetail() {
         id: id && parseInt(id),
     };
 
-    const [createMutation, resultCreate] = useMutation(CREATE_CONTENT);
-    const [createLesson, resultCreateLesson] = useMutation(CREATE_LESSON);
     const [readme, setReadme] = useState(`### Escribe el Readme`);
     const [values, setValues] = useState({
         topicName: "",
         durationTime: "",
-        moduleId: parseInt(id),
+        moduleId: "",
         link: "",
     });
+    const [valor, setValor] = useState({ label: "", value: "" });
 
     const modules = useQuery(MODULES);
+
+    console.log(modules, "modules");
 
     const { topicName, durationTime, link } = values;
 
@@ -43,6 +45,7 @@ function ContentDetail() {
     };
 
     const [execute, { data, refetch }] = useLazyQuery(CONTENT_ID);
+    const [updateMutation, resultUpdate] = useMutation(UPDATE_CONTENT);
 
     useEffect(() => {
         if (id) {
@@ -52,41 +55,28 @@ function ContentDetail() {
 
     useEffect(() => {
         if (data) {
-            setReadme(data?.contents[0]?.readme);
+            setReadme(data.contents[0].readme);
+            setValues({
+                link: data.contents[0]?.lessons[0]?.link,
+                topicName: data.contents[0].topicName,
+                durationTime: data.contents[0].durationTime,
+                moduleId: parseInt(data.contents[0].moduleId),
+            });
         }
     }, [data]);
 
-    const handleCreate = async () => {
-        const variables = {
-            ...values,
-            durationTime: parseInt(values.durationTime),
-            moduleId: parseInt(id),
-            readme,
-            link: `https://player.vimeo.com/video/${values.link}`,
-        };
-        console.log(variables, "variables");
-        await createMutation({
-            variables: variables,
-        });
-    };
+    console.log(data, "data");
+    console.log(values, "values");
 
     useEffect(() => {
-        if (resultCreate.data) {
-            const id = resultCreate?.data?.createContent?.id;
-            console.log(id, "id del useEffect");
-            if (id) {
-                createLesson({
-                    variables: {
-                        link: `https://player.vimeo.com/video/${values.link}`,
-                        contentId: id,
-                    },
-                });
-            }
-            return router.push("/admin/modules/");
+        if (modules) {
+            const match = modules.data?.modules.find((op) => parseInt(op.id) === values.moduleId);
+            console.log(match, "match");
+            setValor({ label: match?.name, value: match?.id });
         }
-    }, [resultCreate]);
+    }, [modules, values]);
 
-    console.log(resultCreate, "resultCreate");
+    console.log(valor, "valor");
 
     const handleModuleInputChange = function (e) {
         setValues({
@@ -96,16 +86,10 @@ function ContentDetail() {
     };
 
     useEffect(() => {
-        if (!resultCreate.loading && resultCreate.called) {
+        if (!resultUpdate.loading && resultUpdate.called) {
             modules.refetch();
         }
-    }, [resultCreate, refetch]);
-
-    useEffect(() => {
-        if (!resultCreateLesson.loading && resultCreateLesson.called) {
-            modules.refetch();
-        }
-    }, [refetch, resultCreateLesson]);
+    }, [resultUpdate, refetch]);
 
     const [selectedTab, setSelectedTab] = useState("write");
 
@@ -131,6 +115,7 @@ function ContentDetail() {
                 generateMarkdownPreview={(markdown) =>
                     Promise.resolve(converter.makeHtml(markdown))
                 }
+                minEditorHeight={500}
             />
             <div style={{ padding: "50px 0 0 0" }} />
             <form>
@@ -187,8 +172,7 @@ function ContentDetail() {
                         }))}
                         getOptionLabel={(option) => option.label}
                         onChange={(_, e) => handleModuleInputChange(e)}
-                        value={(() =>
-                            modules.data?.modules.find((op) => op.id === values.moduleId))()}
+                        value={valor ? valor : ""}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
@@ -208,8 +192,16 @@ function ContentDetail() {
                     ""
                 )}
                 <ButtonBox>
-                    <Button variant="contained" color="primary" onClick={handleCreate}>
-                        Crear
+                    <Button type="submit" variant="contained" color="primary">
+                        Actualizar
+                    </Button>
+
+                    <Button
+                        type="button"
+                        /* onClick={handleDelete} */
+                        variant="contained"
+                        color="secondary">
+                        ELIMINAR
                     </Button>
                 </ButtonBox>
             </form>
