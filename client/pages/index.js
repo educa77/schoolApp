@@ -3,14 +3,14 @@ import Dashboard from "../pages/dashboard";
 import styled from "styled-components";
 
 export default function Home() {
-  return (
-    <>
-      <Dashboard />
-    </>
-  );
+    return (
+        <>
+            <Dashboard />
+        </>
+    );
 }
 
 Home.renderData = {
-  authRequired: true,
-  currentView: "Dashboard",
+    authRequired: true,
+    currentView: "Dashboard",
 };
