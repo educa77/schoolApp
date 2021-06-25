@@ -1,17 +1,26 @@
 import React from "react";
 import styled from "styled-components";
+import { AnimatePresence, motion } from "framer-motion";
 
 function Dashboard() {
     return (
-        <ContainerBox>
-            <Draw src="assets/hello.svg" alt="hello" />
-        </ContainerBox>
+        <AnimatePresence>
+            <ContainerBox
+                exit={{ opacity: 0 }}
+                animate={{
+                    scale: [1, 2, 2, 1, 1],
+                    rotate: [0, 0, 270, 270, 0],
+                    borderRadius: ["20%", "20%", "50%", "50%", "20%"],
+                }}>
+                <Draw src="assets/hello.svg" alt="hello" />
+            </ContainerBox>
+        </AnimatePresence>
     );
 }
 
 export default Dashboard;
 
-const ContainerBox = styled.div`
+const ContainerBox = styled(motion.div)`
     display: flex;
     justify-content: center;
     align-items: center;

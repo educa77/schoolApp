@@ -67,15 +67,17 @@ const ContentsScreen = () => {
     );
 
     return (
-        <Tabla
-            loading={loading}
-            data={tableData}
-            count={undefined}
-            page={1}
-            rowsPerPage={4}
-            onChangePage={2}
-            onChangeRowsPerPage={2}
-        />
+        tableData && (
+            <Tabla
+                loading={loading}
+                data={tableData}
+                count={undefined}
+                page={1}
+                rowsPerPage={4}
+                onChangePage={2}
+                onChangeRowsPerPage={2}
+            />
+        )
     );
 };
 

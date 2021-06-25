@@ -1,4 +1,5 @@
 import LogIn from "../views/login";
+import { AnimatePresence } from "framer-motion";
 
 export default function ingresar() {
     return (

@@ -23,11 +23,10 @@ function ContentDetail() {
         if (id) {
             execute({ variables });
         }
-    }, []);
+    }, [id]);
 
     useEffect(() => {
         if (data) {
-            console.log(data, "data");
             setReadme(data.contents[0]?.readme);
         }
     }, [data]);

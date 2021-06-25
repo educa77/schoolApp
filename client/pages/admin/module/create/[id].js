@@ -48,7 +48,7 @@ function ContentDetail() {
         if (id) {
             execute({ variables });
         }
-    }, []);
+    }, [id]);
 
     useEffect(() => {
         if (data) {

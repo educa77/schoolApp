@@ -20,7 +20,6 @@ const ModuleScreen = () => {
     const data = useMemo(() => {
         if (Array.isArray(preData?.modules)) {
             return preData.modules.map((module) => {
-                console.log(module, "module");
                 return {
                     ...module,
                 };
@@ -70,15 +69,17 @@ const ModuleScreen = () => {
     );
 
     return (
-        <Tabla
-            loading={loading}
-            data={tableData}
-            count={undefined}
-            page={0}
-            rowsPerPage={10}
-            onChangePage={2}
-            onChangeRowsPerPage={2}
-        />
+        tableData && (
+            <Tabla
+                loading={loading}
+                data={tableData}
+                count={undefined}
+                page={0}
+                rowsPerPage={10}
+                onChangePage={2}
+                onChangeRowsPerPage={2}
+            />
+        )
     );
 };
 

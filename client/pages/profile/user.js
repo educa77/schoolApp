@@ -4,8 +4,8 @@ import { Avatar, Container, Grid, makeStyles } from "@material-ui/core";
 import { UPDATE_USER } from "../../apollo/Mutations/users";
 import { USER_BY_ID } from "../../apollo/querys/users";
 import { useSelector } from "react-redux";
-import BasicInfo from "./profile.BasicInfo";
-import Contact from "./profile.Contact";
+import BasicInfo from "../../profileUtils/profilebasicinfo";
+import Contact from "../../profileUtils/profilecontact";
 
 const useStyles = makeStyles((theme) => ({
     avatar: {

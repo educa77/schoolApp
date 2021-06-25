@@ -166,18 +166,18 @@ export default function Tabla({
                         context={data.actions.create}
                     />
                 )}
+                {count && (
+                    <TablePagination
+                        rowsPerPageOptions={rowsPerPageOptions}
+                        component="div"
+                        count={count}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onChangePage={onChangePage}
+                        onChangeRowsPerPage={onChangeRowsPerPage}
+                    />
+                )}
             </Container>
-            {count && (
-                <TablePagination
-                    rowsPerPageOptions={rowsPerPageOptions}
-                    component="div"
-                    count={count}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onChangePage={onChangePage}
-                    onChangeRowsPerPage={onChangeRowsPerPage}
-                />
-            )}
         </>
     );
 }

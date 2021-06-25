@@ -102,16 +102,18 @@ function Alumns() {
     );
 
     return (
-        <div>
-            <Tabla loading={loading} data={tableData} />
-            <Snackbar
-                open={showSnackbar}
-                autoHideDuration={3000}
-                onClose={() => setShowSnackbar(false)}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}>
-                <Alert severity="info">Email copiado al potapapeles</Alert>
-            </Snackbar>
-        </div>
+        tableData && (
+            <div>
+                <Tabla loading={loading} data={tableData} />
+                <Snackbar
+                    open={showSnackbar}
+                    autoHideDuration={3000}
+                    onClose={() => setShowSnackbar(false)}
+                    anchorOrigin={{ vertical: "top", horizontal: "right" }}>
+                    <Alert severity="info">Email copiado al potapapeles</Alert>
+                </Snackbar>
+            </div>
+        )
     );
 }
 
