@@ -22,37 +22,36 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(cors());
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
+    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
 });
 
 const playgroundSettings = {
-  "schema.polling.enable": false,
+    settings: {
+        "schema.polling.enable": false,
+    },
 };
 
 const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers,
-  introspection: true,
-  playground: playgroundSettings,
-  debug: false,
+    typeDefs,
+    resolvers,
+    introspection: true,
+    playground: playgroundSettings,
+    debug: false,
 });
 
 apolloServer.applyMiddleware({ app });
 
 app.all("*", function (req, res, next) {
-  passport.authenticate("bearer", function (err, user) {
-    if (err) return next(err);
-    if (user) {
-      req.user = user;
-    }
-    return next();
-  })(req, res, next);
+    passport.authenticate("bearer", function (err, user) {
+        if (err) return next(err);
+        if (user) {
+            req.user = user;
+        }
+        return next();
+    })(req, res, next);
 });
 
 app.use(passport.initialize());
