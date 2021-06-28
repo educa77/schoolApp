@@ -97,3 +97,20 @@ export const USER_COHORTES = gql`
     }
   }
 `;
+
+export const USER_STUDENT_COHORTES = gql`
+  query userFull($id: Int, $where: JSON, $limit: Int, $offset: Int, $order: JSON) {
+    users(id: $id, where: $where, limit: $limit, offset: $offset, order: $order) {
+      id
+      givenName
+      familyName
+      nickName
+      email
+      photoUrl
+      cohortes {
+        id
+        name
+      }
+    }
+  }
+`;
