@@ -1,3 +1,4 @@
+require("@babel/polyfill");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -12,46 +13,59 @@ const http = require("http");
 
 require("./db.js");
 
+const { conn } = require("./db");
+const AdminBro = require("admin-bro");
+const AdminBroExpress = require("@admin-bro/express");
+const AdminBroSequelize = require("@admin-bro/sequelize");
+AdminBro.registerAdapter(AdminBroSequelize);
+
 const app = express();
+
+const adminBro = new AdminBro({
+  databases: [conn],
+  rootPath: "/admin",
+});
+const adminRouter = AdminBroExpress.buildRouter(adminBro);
 
 app.name = "API";
 
+app.use(adminBro.options.rootPath, adminRouter);
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(cors());
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
+  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
 });
 
 const playgroundSettings = {
-    settings: {
-        "schema.polling.enable": false,
-    },
+  settings: {
+    "schema.polling.enable": false,
+  },
 };
 
 const apolloServer = new ApolloServer({
-    typeDefs,
-    resolvers,
-    introspection: true,
-    playground: playgroundSettings,
-    debug: false,
+  typeDefs,
+  resolvers,
+  introspection: true,
+  playground: playgroundSettings,
+  debug: false,
 });
 
 apolloServer.applyMiddleware({ app });
 
 app.all("*", function (req, res, next) {
-    passport.authenticate("bearer", function (err, user) {
-        if (err) return next(err);
-        if (user) {
-            req.user = user;
-        }
-        return next();
-    })(req, res, next);
+  passport.authenticate("bearer", function (err, user) {
+    if (err) return next(err);
+    if (user) {
+      req.user = user;
+    }
+    return next();
+  })(req, res, next);
 });
 
 app.use(passport.initialize());
