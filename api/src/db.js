@@ -18,6 +18,8 @@ const matesScoreModels = require("./models/ClassmatesScore");
 const mateReviewModels = require("./models/MateReview");
 const postModels = require("./models/Posts");
 
+const users_roleModel = require("./models/users_role");
+
 // ======================= FIN Importación de modelos =======================
 
 // ==========================================================================
@@ -32,16 +34,16 @@ const postModels = require("./models/Posts");
   }
 ); */
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
-    host: DB_HOST,
-    dialect: "postgres",
-    operatorsAliases: false,
+  host: DB_HOST,
+  dialect: "postgres",
+  operatorsAliases: false,
 
-    pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000,
-    },
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
+  },
 });
 
 // ========================== FIN Conexion a la BD ==========================
@@ -62,6 +64,7 @@ const MatesScoreType = matesScoreModels(sequelize, DataTypes);
 const MateReview = mateReviewModels(sequelize, DataTypes);
 const Lesson = LessonModels(sequelize, DataTypes);
 const Post = postModels(sequelize, DataTypes);
+const Users_role = users_roleModel(sequelize, DataTypes);
 // =================== FIN Creación de entidades en la BD ===================
 
 // ==========================================================================
@@ -69,8 +72,8 @@ const Post = postModels(sequelize, DataTypes);
 // ===================== Relaciones entre las enteidades ====================
 
 // Relacion Usuarios y Roles
-User.belongsToMany(Role, { through: "users_role" });
-Role.belongsToMany(User, { through: "users_role" });
+User.belongsToMany(Role, { through: Users_role, as: "role", foreignKey: "userId" });
+Role.belongsToMany(User, { through: Users_role, foreignKey: "roleId", otherKey: "userId" });
 
 // Relaciones de Usuario y Cohorte
 User.belongsToMany(Cohorte, { through: "users_cohorte" });
@@ -86,7 +89,7 @@ Module.belongsToMany(Cohorte, { through: "modules_cohorte" });
 
 // Relacion Contenidos y Modulos
 Module.hasMany(Content, {
-    foreignKey: "moduleId",
+  foreignKey: "moduleId",
 });
 Content.belongsTo(Module);
 
@@ -108,7 +111,7 @@ Group.belongsTo(Cohorte);
 
 //Relacion entre Clases y Contenidos.
 Content.hasMany(Lesson, {
-    foreignKey: "contentId",
+  foreignKey: "contentId",
 });
 Lesson.belongsTo(Content);
 
@@ -135,72 +138,73 @@ Post.belongsTo(Group);
 // CREACIÓN DE LOS ROLES
 
 const createRoles = async () => {
-    let staffRole = await Role.findOne({ where: { name: "staff" } });
-    let instructorRole = await Role.findOne({
-        where: { name: "instructor" },
+  let staffRole = await Role.findOne({ where: { name: "staff" } });
+  let instructorRole = await Role.findOne({
+    where: { name: "instructor" },
+  });
+  let pmRole = await Role.findOne({ where: { name: "pm" } });
+  let alumnoRole = await Role.findOne({ where: { name: "student" } });
+
+  if (!staffRole) {
+    staffRole = await Role.create({ name: "staff" });
+  }
+  if (!instructorRole) {
+    instructorRole = await Role.create({ name: "instructor" });
+  }
+  if (!pmRole) {
+    pmRole = await Role.create({ name: "pm" });
+  }
+  if (!alumnoRole) {
+    alumnoRole = await Role.create({ name: "student" });
+  }
+
+  const RootUser = await User.findOne({
+    where: { email: "rootuser@root.com" },
+  });
+
+  if (!RootUser) {
+    const RootUser = await User.create({
+      givenName: "root",
+      familyName: "root",
+      nickName: "root",
+      email: "rootuser@root.com",
+      password: "123456789",
     });
-    let pmRole = await Role.findOne({ where: { name: "pm" } });
-    let alumnoRole = await Role.findOne({ where: { name: "student" } });
 
-    if (!staffRole) {
-        staffRole = await Role.create({ name: "staff" });
-    }
-    if (!instructorRole) {
-        instructorRole = await Role.create({ name: "instructor" });
-    }
-    if (!pmRole) {
-        pmRole = await Role.create({ name: "pm" });
-    }
-    if (!alumnoRole) {
-        alumnoRole = await Role.create({ name: "student" });
-    }
-
-    const RootUser = await User.findOne({
-        where: { email: "rootuser@root.com" },
-    });
-
-    if (!RootUser) {
-        const RootUser = await User.create({
-            givenName: "root",
-            familyName: "root",
-            nickName: "root",
-            email: "rootuser@root.com",
-            password: "123456789",
-        });
-
-        RootUser.addRole(staffRole);
-    }
+    RootUser.addRole(staffRole);
+  }
 };
 
 function parseWhere(where) {
-    for (let prop in where) {
-        const splitProp = prop.split("_");
-        if (splitProp.length === 2) {
-            where[splitProp[0]] = {
-                [Op[splitProp[1]]]: where[prop],
-            };
-            delete where[prop];
-        }
+  for (let prop in where) {
+    const splitProp = prop.split("_");
+    if (splitProp.length === 2) {
+      where[splitProp[0]] = {
+        [Op[splitProp[1]]]: where[prop],
+      };
+      delete where[prop];
     }
-    return where;
+  }
+  return where;
 }
 
 module.exports = {
-    conn: sequelize,
-    parseWhere,
-    Op,
-    DataTypes,
-    Cohorte,
-    User,
-    Role,
-    createRoles,
-    Score,
-    Content,
-    CheckPoint,
-    Module,
-    Group,
-    MatesScoreType,
-    MateReview,
-    Lesson,
-    Post,
+  conn: sequelize,
+  parseWhere,
+  Op,
+  DataTypes,
+  Cohorte,
+  User,
+  Role,
+  createRoles,
+  Score,
+  Content,
+  CheckPoint,
+  Module,
+  Group,
+  MatesScoreType,
+  MateReview,
+  Lesson,
+  Post,
+  Users_role,
 };

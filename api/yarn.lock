@@ -1840,6 +1840,11 @@ acorn@^7.4.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.1.tgz#feaed255973d2e77555b83dbc08851a6c63520fa"
   integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
 
+admin-bro-expressjs@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/admin-bro-expressjs/-/admin-bro-expressjs-2.1.1.tgz#2b6c68eee2e522c57cc293c5e367fa477d907afb"
+  integrity sha512-xTGmyqT+HvSIy4DLLET9JSvEMt1KrbDIbcZ0H6VgO+l6i8vbcmR1T+k1efx9TXfMZCIMOhUwIS2u4ja4iQMH1Q==
+
 admin-bro@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/admin-bro/-/admin-bro-4.0.1.tgz#0f193371396175f235b7dd76134e04bc05e1bc3a"
@@ -3782,7 +3787,7 @@ flat@^4.1.0:
   dependencies:
     is-buffer "~2.0.3"
 
-flat@^5.0.0:
+flat@^5.0.0, flat@^5.0.2:
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/flat/-/flat-5.0.2.tgz#8ca6fe332069ffa9d324c327198c598259ceb241"
   integrity sha512-b6suED+5/3rTpUBdG1gupIl8MPFCAMA0QXwmljLhvCUKcUvdE4gWky9zpuGCcXHOsz4J9wPGNWq6OKpmIzz3hQ==

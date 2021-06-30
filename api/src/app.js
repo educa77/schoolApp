@@ -13,19 +13,88 @@ const http = require("http");
 
 require("./db.js");
 
-const { conn } = require("./db");
+const { conn, User, Role, Users_role } = require("./db");
 const AdminBro = require("admin-bro");
 const AdminBroExpress = require("@admin-bro/express");
-const AdminBroSequelize = require("@admin-bro/sequelize");
-AdminBro.registerAdapter(AdminBroSequelize);
+//const AdminBroSequelize = require("@admin-bro/sequelize");
+const Adapter = require("../adminfiles/adapter");
+const { after: manyToManyAfterHook } = require("../adminfiles/manytomany.hook");
+const manyToManyComponent = {
+  type: "many",
+  components: {
+    edit: AdminBro.bundle("../adminfiles/manytomany.edit.jsx"),
+    list: AdminBro.bundle("../adminfiles/manytomany.list.jsx"),
+  },
+};
 
-const app = express();
+const manyToManyActionHooks = {
+  new: {
+    after: manyToManyAfterHook,
+  },
+  edit: {
+    after: manyToManyAfterHook,
+  },
+};
+
+AdminBro.registerAdapter(Adapter);
+
+const sidebarGroups = {
+  managerAdmin: {
+    name: "Administrar",
+    icon: "Settings",
+  },
+  hidden: {
+    name: "Hidden",
+  },
+};
 
 const adminBro = new AdminBro({
-  databases: [conn],
+  /* databases: [conn], */
   rootPath: "/admin",
+  resources: [
+    {
+      resource: User,
+      options: {
+        actions: manyToManyActionHooks,
+
+        showProperties: [
+          "givenName",
+          "familyName",
+          "nickName",
+          "email",
+          "id",
+          "createdAt",
+          "updatedAt",
+          "roles",
+        ],
+        editProperties: ["givenName", "familyName", "nickName", "email", "password", "roles"],
+        listProperties: ["givenName", "familyName", "nickName", "email", "roles", "createdAt"],
+        properties: {
+          roles: manyToManyComponent,
+        },
+        navigation: sidebarGroups.managerAdmin,
+      },
+    },
+    {
+      resource: Role,
+      options: {
+        showProperties: ["id", "name"],
+        editProperties: ["id", "name"],
+        listProperties: ["id", "name"],
+        navigation: sidebarGroups.managerAdmin,
+      },
+    },
+    {
+      resource: Users_role,
+      options: {
+        navigation: sidebarGroups.managerAdmin,
+      },
+    },
+  ],
 });
 const adminRouter = AdminBroExpress.buildRouter(adminBro);
+
+const app = express();
 
 app.name = "API";
 
