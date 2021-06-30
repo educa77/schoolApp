@@ -75,9 +75,9 @@ module.exports = function (sequelize, Datatypes) {
         }
       },
     },
-    /*     roles: {
+    roles: {
       type: Datatypes.VIRTUAL,
-    }, */
+    },
   });
   User.prototype.compare = function (password) {
     return bcrypt.compareSync(password, this.password);

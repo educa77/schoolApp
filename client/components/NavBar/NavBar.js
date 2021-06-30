@@ -35,7 +35,7 @@ function NavBar({ show, children, view }) {
         paper: [classShow, classes.drawerPaper].join(" "),
       }}>
       <List>
-        {user && user.roles.find((role) => role.name === "student") && (
+        {user && user.role.find((role) => role.name === "student") && (
           <>
             <NavBarItem
               title="Cohortes"
@@ -58,7 +58,7 @@ function NavBar({ show, children, view }) {
           </>
         )}
         <Divider />
-        {user && user.roles.find((role) => role.name === "staff") && (
+        {user && user.role.find((role) => role.name === "staff") && (
           <>
             <NavBarItem
               title="Dashboard"
