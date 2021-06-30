@@ -23,6 +23,7 @@ function NavBar({ show, children, view }) {
     () => (show ? classes.drawerOpen : classes.drawerClose),
     [show, classes]
   );
+  console.log(user, " user");
 
   return (
     <Drawer

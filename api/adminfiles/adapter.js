@@ -39,16 +39,10 @@ class Resource extends SequelizeResource {
       (association) => console.log(association.as)
     );
     console.log(veremos, "association.as"); */
-    const singular = alias.slice(0, -1);
-    if (alias === "kb__tags") {
-      return Object.values(this.SequelizeModel.associations).filter(
-        (association) => association.as === "kbtags"
-      );
-    } else {
-      return Object.values(this.SequelizeModel.associations).filter(
-        (association) => association.as === singular
-      );
-    }
+    return Object.values(this.SequelizeModel.associations).filter(
+      (association) => association.as === alias
+    );
+
     /* retorna [roles] */
   }
 

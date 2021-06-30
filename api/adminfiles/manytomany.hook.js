@@ -62,6 +62,7 @@ const after = async (response, request, context) => {
     /* PARA CREAR UN ELEMENTO NUEVO */
     const { record } = context;
     if (request.method === "post" && record.isValid()) {
+      console.log("entro aca??");
       /* aca entra cuando se genera un record nuevo */
       const params = unflatten(request.payload);
 

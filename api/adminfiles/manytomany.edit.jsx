@@ -33,13 +33,14 @@ const ResourceSelection = (props) => {
   };
 
   const handleChange = (selectedOptions) => {
+    console.log(name, "name");
     setSelected(selectedOptions);
     selectedOptions != null
       ? onChange(
-          name,
+          "role",
           selectedOptions.map((v) => v.value)
         )
-      : onChange(name, null);
+      : onChange("role", null);
   };
 
   useEffect(() => {

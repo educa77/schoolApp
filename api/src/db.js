@@ -72,7 +72,7 @@ const Users_role = users_roleModel(sequelize, DataTypes);
 // ===================== Relaciones entre las enteidades ====================
 
 // Relacion Usuarios y Roles
-User.belongsToMany(Role, { through: Users_role, as: "role", foreignKey: "userId" });
+User.belongsToMany(Role, { through: Users_role, /* as: "role",  */ foreignKey: "userId" });
 Role.belongsToMany(User, { through: Users_role, foreignKey: "roleId", otherKey: "userId" });
 
 // Relaciones de Usuario y Cohorte
